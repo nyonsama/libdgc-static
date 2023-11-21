@@ -13,13 +13,15 @@ const paths = {
 };
 
 const urlPathToFilePath = (urlPath: string, base?: string) => {
-  let absolute = urlPath;
   const isIndex = urlPath.endsWith("/");
   const hasExt = /\..+$/.test(urlPath);
-  if (isIndex) {
-    absolute += "index.html"; // /path/to/page/ -> /path/to/page/index.html
-  } else if (!hasExt) {
-    absolute += ".html"; // /path/to/page -> /path/to/page.html
+  let absolute;
+  if (hasExt) {
+    absolute = urlPath; // /page.html -> /page.html
+  } else if (isIndex) {
+    absolute = `${urlPath}index.html`; // /path/to/page/ -> /path/to/page/index.html
+  } else {
+    absolute = `${urlPath}.html`; // /path/to/page -> /path/to/page.html
   }
   const relative = absolute.replace(/^\//, "");
   const parsedPath = path.posix.parse(relative);
@@ -41,8 +43,10 @@ const renderPage = async (urlPath: string, component: ReactElement) => {
   return;
 };
 
-const renderPost = async (filePath: string): Promise<PostPageProps> => {
-  const html = `<h1>post</h1><p>${filePath}</p>`;
+const renderPost = async (postPath: string): Promise<PostPageProps> => {
+  // TODO: render post
+  const md = await fs.readFile(path.join(postPath,'index.md'));
+  const html = `<h1>post</h1><p>${postPath}</p><pre><code>${md}</code></pre>`;
   return {
     post: {
       metadata: { title: "post" },
