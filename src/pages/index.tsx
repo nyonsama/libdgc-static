@@ -8,7 +8,7 @@ export const Index: FC<{}> = () => {
       <body>
         <div>
           <h2>home</h2>
-          <a href="/posts/test-post">posts/test-post</a>
+          <a href="/posts/rendertest">posts/rendertest</a>
         </div>
       </body>
     </html>

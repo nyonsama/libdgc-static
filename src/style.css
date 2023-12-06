@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+:root {
+  min-height: 100vh;
+}
+
+.prose a:hover:not(a[class~="not-prose"]) {
+  text-decoration-line: underline;
+}
+
+.prose iframe {
+  @apply border border-gray-300;
+}

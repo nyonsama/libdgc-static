@@ -1,3 +1,4 @@
 {
-    "livePreview.serverRoot": "dist"
+    "livePreview.serverRoot": "dist",
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

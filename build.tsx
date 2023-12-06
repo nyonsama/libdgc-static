@@ -5,6 +5,7 @@ import { Index } from "./src/pages";
 import { PostPage, PostPageProps } from "./src/pages/post";
 import { ReactElement } from "react";
 import Page404 from "./src/pages/404";
+import { renderMarkdown } from "./src/build";
 
 const paths = {
   dist: path.join(process.cwd(), "dist"),
@@ -44,12 +45,21 @@ const renderPage = async (urlPath: string, component: ReactElement) => {
 };
 
 const renderPost = async (postPath: string): Promise<PostPageProps> => {
-  // TODO: render post
-  const md = await fs.readFile(path.join(postPath,'index.md'));
-  const html = `<h1>post</h1><p>${postPath}</p><pre><code>${md}</code></pre>`;
+  const filePath = path.join(postPath, "index.md");
+  const mdString = (await fs.readFile(filePath)).toString("utf8");
+  const { frontMatter, toc, html } = await renderMarkdown(mdString);
+  if (!frontMatter.title) {
+    throw new Error(`${postPath} title is empty`);
+  }
+  if (!frontMatter.createDate) {
+    throw new Error(`${postPath} createDate is empty`);
+  }
   return {
     post: {
-      metadata: { title: "post" },
+      metadata: {
+        toc,
+        ...frontMatter,
+      },
       html,
     },
   };
@@ -81,6 +91,10 @@ const renderAll = async () => {
 
 const copyPublicFiles = async () => {
   try {
+    await fs.cp(
+      "node_modules/highlight.js/styles/github-dark.min.css",
+      path.join(paths.dist, "github-dark.min.css")
+    );
     const files = await fs.readdir(paths.public);
     for (const fileName of files) {
       const filePath = path.join(paths.public, fileName);

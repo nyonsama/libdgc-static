@@ -1,10 +1,10 @@
 export interface PostMetadata {
-  ctime?: number;
-  mtime?: number;
+  createDate: string;
+  modifyDate?: string;
   title: string;
   author?: string;
   tags?: string[];
-  toc?: TableOfContents[];
+  toc?: TocEntry[];
 }
 
 export interface Post {
@@ -12,8 +12,8 @@ export interface Post {
   html: string;
 }
 
-export interface TableOfContents {
+export interface TocEntry {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   id: string;
-  title: string;
+  content: string;
 }
