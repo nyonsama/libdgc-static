@@ -6,9 +6,9 @@ const Page404: FC = () => {
     <html lang="zh">
       <Head />
       <body>
-        <div>
-          <h1>404</h1>
-          <p>This page seems does not exists.</p>
+        <div className="text-center pt-8">
+          <h1 className="text-4xl text-gray-300 mb-4">404</h1>
+          <p className="text-lg text-gray-400">Nothing here.</p>
         </div>
       </body>
     </html>
