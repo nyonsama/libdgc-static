@@ -9,6 +9,7 @@
 
 :root {
   min-height: 100vh;
+  @apply bg-zinc-900;
 }
 
 .prose a:hover:not(a[class~="not-prose"]) {
@@ -17,4 +18,13 @@
 
 .prose iframe {
   @apply border border-gray-300;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply scroll-mt-16;
 }
