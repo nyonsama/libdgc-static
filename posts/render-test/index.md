@@ -1,8 +1,6 @@
 ---
 title: "测试 Markdown 渲染效果" # 此处中英文混排需要手动加空格，正文使用vscode自动加空格所以不用手动
 createDate: "2023-01-20"
-description: "包括CommonMark、GFM、代码高亮、iframe 等"
-category: "杂项"
 tags: ["markdown", "测试", "站务"]
 ---
 

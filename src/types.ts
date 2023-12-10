@@ -9,6 +9,7 @@ export interface PostMetadata {
 
 export interface Post {
   metadata: PostMetadata;
+  path: string;
   html: string;
 }
 

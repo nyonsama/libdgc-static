@@ -1,14 +1,15 @@
-import { FC } from "react";
+import { FC, PropsWithChildren } from "react";
 
-interface HeadProps {
+interface HeadProps extends PropsWithChildren {
   title?: string;
 }
-const Head: FC<HeadProps> = ({ title = "libdgc-static" } = {}) => {
+
+const Head: FC<HeadProps> = ({ title = "libdgc.club", children } = {}) => {
   return (
     <head>
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link href="/github-dark.min.css" rel="stylesheet" />
+      {children}
       <link href="/style.css" rel="stylesheet" />
       <title>{title}</title>
     </head>

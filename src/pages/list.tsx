@@ -1,17 +1,16 @@
-import { FC, Fragment } from "react";
+import React, { FC } from "react";
 import Head from "../components/Head";
-import { Post } from "../types";
-import Link from "../components/Link";
-import Footer from "../components/Footer";
 import PostList, { Pagination } from "../components/PostList";
+import { Post } from "../types";
+import Footer from "../components/Footer";
 
-export interface IndexProps {
+export interface ListPageProps {
   posts: Post[];
   pagination: Pagination;
 }
-export const Index: FC<IndexProps> = ({ posts, pagination }) => {
+const ListPage: FC<ListPageProps> = ({ pagination, posts }) => {
   return (
-    <html lang="zh">
+    <html>
       <Head />
       <body>
         <div className="flex min-h-full flex-col">
@@ -21,12 +20,8 @@ export const Index: FC<IndexProps> = ({ posts, pagination }) => {
             </div>
           </nav>
           <div className="flex flex-1 flex-col items-center px-4 pb-8">
-            <div className="w-full max-w-2xl">
-              <header className="my-16 text-center">
-                <h1 className="mb-2 text-4xl">libdgc.club</h1>
-                <p className="text-base text-gray-400">某人的电子草稿纸</p>
-              </header>
-              {/* <h2 className="text-2xl">文章列表</h2> */}
+            <div className="w-full max-w-2xl pt-4">
+              <h1 className="text-2xl">文章列表</h1>
               <PostList posts={posts} pagination={pagination} />
             </div>
           </div>
@@ -36,3 +31,5 @@ export const Index: FC<IndexProps> = ({ posts, pagination }) => {
     </html>
   );
 };
+
+export default ListPage;

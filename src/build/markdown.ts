@@ -18,7 +18,7 @@ import { TocEntry } from "../types";
 
 const remarkRemoveTitle = () => (tree: mdast.Root, file: VFile) => {
   let titleIndex = tree.children.findIndex(
-    (c) => c.type === "heading" && c.depth === 1
+    (c) => c.type === "heading" && c.depth === 1,
   );
   if (titleIndex !== -1) {
     tree.children.splice(titleIndex, 1);
@@ -54,7 +54,6 @@ export const renderMarkdown = async (markdown: string) => {
     .use(rehypePresetMinify)
     .use(rehypeStringify)
     .process(markdown);
-  console.log("frontMatter", vf.data.matter);
   return {
     frontMatter: vf.data.matter as any,
     toc: vf.data.toc as TocEntry[],

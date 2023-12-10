@@ -8,8 +8,8 @@
 }
 
 :root {
-  min-height: 100vh;
-  @apply bg-zinc-900;
+  /* min-height: 100vh; */
+  @apply bg-zinc-900 text-gray-300;
 }
 
 .prose a:hover:not(a[class~="not-prose"]) {
@@ -17,7 +17,16 @@
 }
 
 .prose iframe {
-  @apply border border-gray-300;
+  @apply border border-gray-500;
+}
+
+.prose code {
+  @apply text-xs;
+}
+
+.prose pre code,
+.prose pre code.hljs {
+  @apply p-1;
 }
 
 .prose h1,
