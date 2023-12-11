@@ -46,7 +46,7 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
           .map((_, i) => (
             <a
               key={i}
-              href={`/list/${i + 1}`}
+              href={`/list/${i + 1}.html`}
               className={classNames(
                 "flex h-8 w-8 items-center justify-center text-sm",
                 i === pagination.current

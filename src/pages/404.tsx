@@ -5,7 +5,7 @@ import Link from "../components/Link";
 const Page404: FC = () => {
   return (
     <html lang="zh">
-      <Head />
+      <Head title="404" />
       <body>
         <div className="pt-8 text-center">
           <h1 className="mb-4 text-4xl">404</h1>

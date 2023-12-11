@@ -33,7 +33,7 @@ export interface PostPageProps {
 export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
   return (
     <html lang="zh">
-      <Head>
+      <Head title={post.metadata.title}>
         <link href="/github-dark.min.css" rel="stylesheet" />
       </Head>
       <body>

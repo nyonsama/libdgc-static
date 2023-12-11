@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { Index, IndexProps } from "./src/pages";
+import { IndexPage, IndexProps } from "./src/pages";
 import { PostPage } from "./src/pages/post";
 import { ReactElement } from "react";
 import Page404 from "./src/pages/404";
@@ -105,7 +105,7 @@ const renderAll = async () => {
   );
   await renderPage(
     "/",
-    <Index
+    <IndexPage
       posts={postDataList.slice(0, postsPerPage)}
       pagination={{ current: 0, total: totalPages }}
     />,

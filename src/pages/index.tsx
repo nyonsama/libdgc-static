@@ -9,7 +9,7 @@ export interface IndexProps {
   posts: Post[];
   pagination: Pagination;
 }
-export const Index: FC<IndexProps> = ({ posts, pagination }) => {
+export const IndexPage: FC<IndexProps> = ({ posts, pagination }) => {
   return (
     <html lang="zh">
       <Head />
