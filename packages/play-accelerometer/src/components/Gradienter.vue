@@ -1,32 +1,13 @@
 <script setup lang="ts">
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  ref,
-  shallowRef,
-  watch,
-  watchEffect,
-} from "vue";
+import { computed, onUnmounted, ref, shallowRef, watch } from "vue";
 
 const orientation = ref({ alpha: 0, beta: 0, gamma: 0 });
 window.ondeviceorientation = (e) => {
   const { alpha, beta, gamma } = e;
   orientation.value = { alpha: alpha ?? 0, beta: beta ?? 0, gamma: gamma ?? 0 };
 };
-// const orientationSensor = new RelativeOrientationSensor({ frequency: 1000 });
-// const quaternion = ref([0, 0, 0, 0]);
-// orientationSensor.onreading = () => {
-// quaternion.value = orientationSensor.quaternion ?? [0, 0, 0, 0];
-// };
-// orientationSensor.start();
-// const quaternionRotate = computed(() => {
-//   const [x, y, z, w] = quaternion.value;
-//   const theta = acos(w) * 2;
-//   return [theta, x / sin(theta / 2), y / sin(theta / 2), z / sin(theta / 2)];
-// });
 
-const { sign, atan, sin, cos, acos, asin, PI, sqrt, max, min, abs } = Math;
+const { sign, atan, sin, cos, asin, PI, sqrt, abs } = Math;
 const rad2deg = (rad: number) => (rad / (2 * PI)) * 360;
 
 const api = ref<"GravitySensor" | "DeviceMotion">("GravitySensor");
@@ -49,19 +30,12 @@ const relativeAcceleration = computed(() => {
     sign(raw.z) * cos(atan(raw.y / raw.z) - atan(base.y / base.z)) * lenYZ;
   return { x, y, z };
 });
-const angles = computed(() => {
-  const { x, y, z } = acceleration.value;
-  return { xz: atan(x / z), yz: atan(y / z), xy: atan(x / y) };
-});
 const relativeAngles = computed(() => {
   const { x, y, z } = relativeAcceleration.value;
   return { xz: atan(x / z), yz: atan(y / z), xy: atan(x / y) };
 });
 const relativeHorizontalAngle = computed(() => {
   const { x, y, z } = relativeAcceleration.value;
-  // if (z < 1e-5) {
-  //   return 0;
-  // }
   return atan(sqrt(x ** 2 + y ** 2) / z);
 });
 
@@ -73,7 +47,7 @@ const normalize = (x: number, y: number, z: number) => {
 const bubble = ref<HTMLDivElement | null>(null);
 const transform = computed(() => {
   const { x, y, z } = relativeAcceleration.value;
-  let [nx, ny, nz] = normalize(x, y, z);
+  let [nx, ny] = normalize(x, y, z);
   const rotateAngle = asin(sqrt(nx ** 2 + ny ** 2) / 1);
 
   return `translate(-50%, -50%) translate(${nx * 80}px, ${
@@ -81,9 +55,7 @@ const transform = computed(() => {
   }px) rotate3D(${ny}, ${nx}, 0, ${rotateAngle}rad) `;
 });
 
-const statics = ref({
-  sampleRate: 0,
-});
+const sampleRate = ref(0);
 
 const setHorizontal = () => {
   baseAcceleration.value = { ...acceleration.value };
@@ -101,10 +73,9 @@ let lastSampleRateTime = 0;
 const intervalId = setInterval(() => {
   const now = performance.now();
   if (lastSampleRateTime === 0) {
-    statics.value.sampleRate = 0;
+    sampleRate.value = 0;
   } else {
-    statics.value.sampleRate =
-      sampleCount / ((now - lastSampleRateTime) / 1000);
+    sampleRate.value = sampleCount / ((now - lastSampleRateTime) / 1000);
   }
   lastSampleRateTime = now;
   sampleCount = 0;
@@ -150,16 +121,6 @@ onUnmounted(() => {
   gravityRef.value?.removeEventListener("reading", null);
   window.ondevicemotion = null;
 });
-// 2维旋转矩阵
-// x2 = r cos(a1+sigma) = r (cos(a1)*cos(sigma) - sin(a1) * sin(sigma))
-// = sqrt(x1**2 + y1**2) * (x1 / sqrt(x1**2 + y1**2) * cos(sigma) - y1 / sqrt(x1**2 + y1**2) * sin(sigma))
-// = x1 * cos(sigma) - y1 * sin(sigma)
-// y2 = r sin(a1+sigma) = r (sin(a1) * cos(sigma) + cos(a1) * sin(sigma))
-// = y1 * cos(sigma) + x1 * sin(sigma)
-//
-// [x1, y1] * [cos(sigma), sin(sigma)  = [x2, y2]
-//             -sin(sigma),cos(sigma)]
-//
 </script>
 <template>
   <div class="mb-4">
@@ -193,55 +154,15 @@ onUnmounted(() => {
       <div>a<sub>y</sub>: {{ acceleration.y.toFixed(4) }}m/s<sup>2</sup></div>
       <div>a<sub>z</sub>: {{ acceleration.z.toFixed(4) }}m/s<sup>2</sup></div>
     </div>
-    <!-- <div>
-      orientation
-      <div>alpha: {{ orientation.alpha }}</div>
-      <div>beta: {{ orientation.beta }}</div>
-      <div>gamma: {{ orientation.gamma }}</div>
-    </div> -->
-    <!-- <div>
-      quaternion
-      <div>x: {{ quaternion[0] }}</div>
-      <div>y: {{ quaternion[1] }}</div>
-      <div>z: {{ quaternion[2] }}</div>
-      <div>w: {{ quaternion[3] }}</div>
-    </div> -->
-    <!-- <div>
-      relative acceleration:
-      <div>x:{{ relativeAcceleration.x.toFixed(4) }}</div>
-      <div>y:{{ relativeAcceleration.y.toFixed(4) }}</div>
-      <div>z:{{ relativeAcceleration.z.toFixed(4) }}</div>
-    </div> -->
-    <!-- <div>
-      what
-      <div v-for="val in quaternionRotate">{{ val }}</div>
-    </div> -->
-    <!-- <div>
-      angles:
-      <div>x: {{ rad2deg(relativeAngles.xz).toFixed(4) }}deg</div>
-      <div>y: {{ rad2deg(relativeAngles.yz).toFixed(4) }}deg</div>
-    </div> -->
     <div class="monospace mb-4">
       <div>与水平面的夹角：</div>
       <div>a: {{ rad2deg(relativeHorizontalAngle).toFixed(4) }}deg</div>
       <div>a<sub>x</sub>: {{ rad2deg(relativeAngles.xz).toFixed(4) }}deg</div>
       <div>a<sub>y</sub>: {{ rad2deg(relativeAngles.yz).toFixed(4) }}deg</div>
     </div>
-    <div class="monospace mb-4">
-      采样率：{{ statics.sampleRate.toFixed(4) }}Hz
-    </div>
+    <div class="monospace mb-4">采样率：{{ sampleRate.toFixed(4) }}Hz</div>
     <button class="mr-4" @click="setHorizontal">将当前状态视为水平</button>
     <button @click="reset">重置水平</button>
-    <!-- <div style="width: 100px; height: 100px">
-      <div
-        :style="{
-          width: '50px',
-          height: '50px',
-          background: 'orange',
-          transform: `rotate3d(${quaternionRotate[1]},${quaternionRotate[2]},${quaternionRotate[3]},${quaternionRotate[0]}rad)`,
-        }"
-      ></div>
-    </div> -->
     <div class="gradienter">
       <div class="horizontal-line"></div>
       <div class="vertical-line"></div>
