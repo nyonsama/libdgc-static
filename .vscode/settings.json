@@ -1,4 +1,18 @@
 {
     "livePreview.serverRoot": "dist",
     "typescript.tsdk": "node_modules/typescript/lib",
+    "cSpell.words": [
+        "bunx",
+        "codepaths",
+        "frontmatter",
+        "gradienter",
+        "hljs",
+        "libdgc",
+        "mdast",
+        "rehype",
+        "speculationrules",
+        "tailwindcss",
+        "tsbuildinfo",
+        "vfile"
+    ],
 }

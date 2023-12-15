@@ -39,6 +39,8 @@ const rehypeExtractToc = () => (tree: hast.Root, file: VFile) => {
   file.data.toc = toc;
 };
 
+// TODO: 外部链接
+
 export const renderMarkdown = async (markdown: string) => {
   const vf = await unified()
     .use(remarkParse)
