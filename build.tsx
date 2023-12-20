@@ -5,7 +5,7 @@ import { IndexPage, IndexProps } from "./src/pages";
 import { PostPage } from "./src/pages/post";
 import { ReactElement } from "react";
 import Page404 from "./src/pages/404";
-import { renderMarkdown } from "./src/build";
+import { generateAbstractFromHtml, renderMarkdown } from "./src/utils";
 import ListPage from "./src/pages/list";
 
 const paths = {
@@ -36,7 +36,7 @@ const urlPathToFilePath = (urlPath: string, base?: string) => {
 };
 
 const renderPage = async (urlPath: string, component: ReactElement) => {
-  const html = renderToStaticMarkup(component);
+  const html = `<!DOCTYPE html>${renderToStaticMarkup(component)}`;
   const filePath = urlPathToFilePath(urlPath, paths.dist);
   const fileDir = path.dirname(filePath);
   await fs.mkdir(fileDir, { mode: 0o755, recursive: true });
@@ -72,9 +72,11 @@ const renderAll = async () => {
     // render posts
     const postSourcePath = path.join(paths.posts, post);
     const { metadata, html } = await renderPost(postSourcePath);
+    const abstract = await generateAbstractFromHtml(html);
     const postData = {
       metadata,
       html,
+      abstract,
       path: `/posts/${post}/`,
     };
     await renderPage(`/posts/${post}/index.html`, <PostPage post={postData} />);

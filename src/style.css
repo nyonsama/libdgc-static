@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Zhudou Sans";
+  src: url(/ZhudouSansVF.woff2);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -29,6 +34,10 @@
   @apply p-1;
 }
 
+.prose code {
+  font-family: Hack, ui-monospace;
+}
+
 .prose h1,
 .prose h2,
 .prose h3,
@@ -36,4 +45,8 @@
 .prose h5,
 .prose h6 {
   @apply scroll-mt-16;
+}
+
+.halt {
+  font-feature-settings: "halt";
 }

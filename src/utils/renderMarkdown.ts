@@ -14,7 +14,12 @@ import { visit } from "unist-util-visit";
 import { toHtml } from "hast-util-to-html";
 import { matter } from "vfile-matter";
 import rehypePresetMinify from "rehype-preset-minify";
+import { h } from "hastscript";
 import { TocEntry } from "../types";
+import {
+  allCompressibleCharacters,
+  rehypeCompressPunctuation,
+} from "./compressPunctuation";
 
 const remarkRemoveTitle = () => (tree: mdast.Root, file: VFile) => {
   let titleIndex = tree.children.findIndex(
@@ -39,7 +44,48 @@ const rehypeExtractToc = () => (tree: hast.Root, file: VFile) => {
   file.data.toc = toc;
 };
 
-// TODO: 外部链接
+const getLastTextNode = (node: hast.Element): hast.Text | null => {
+  const lastChild = node.children
+    .filter((child) => child.type === "element" || child.type === "text")
+    .at(-1);
+  if (!lastChild) {
+    return null;
+  } else if (lastChild.type === "text") {
+    return lastChild;
+  } else if (lastChild.type === "element") {
+    return getLastTextNode(lastChild);
+  } else {
+    throw new Error("impossible");
+  }
+};
+
+const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
+  visit(tree, "element", (node) => {
+    if (node.tagName === "a") {
+      const { href } = node.properties;
+      if (typeof href === "string" && href.match(/^[0-9a-zA-Z\-+._]+:/)) {
+        const lastText = getLastTextNode(node);
+        // 挤压图标前面的全角标点
+        // 可能覆盖不了所有情况
+        const needCompress = new RegExp(`[${allCompressibleCharacters}]$`).test(
+          lastText?.value ?? "",
+        );
+        const icon = h("img", {
+          class: [
+            "inline-block",
+            "w-3",
+            "h-3",
+            needCompress ? "ml-0" : "ml-1",
+            "align-baseline",
+            "not-prose",
+          ],
+          src: "/external-link.svg",
+        });
+        node.children.push(icon);
+      }
+    }
+  });
+};
 
 export const renderMarkdown = async (markdown: string) => {
   const vf = await unified()
@@ -52,6 +98,8 @@ export const renderMarkdown = async (markdown: string) => {
     .use(rehypeRaw) // parse raw html in markdown
     .use(rehypeSlug) // add id to headings
     .use(rehypeExtractToc) // export a toc object
+    .use(rehypeExternalAnchor)
+    .use(rehypeCompressPunctuation)
     .use(rehypeHighlight)
     .use(rehypePresetMinify)
     .use(rehypeStringify)

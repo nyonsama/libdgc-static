@@ -14,7 +14,7 @@ const Footer: FC<FooterProps> = ({ className }) => {
           className,
         )}
       >
-        <div>Simple and stupid.</div>
+        <div className="text-gray-300">Keep it simple and stupid.</div>
         <a href="https://github.com/nyonsama/libdgc-static" target="_blank">
           <IconGithub className="h-5 w-5" />
         </a>

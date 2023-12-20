@@ -6,6 +6,7 @@
         "codepaths",
         "frontmatter",
         "gradienter",
+        "hastscript",
         "hljs",
         "libdgc",
         "mdast",

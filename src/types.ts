@@ -11,6 +11,7 @@ export interface Post {
   metadata: PostMetadata;
   path: string;
   html: string;
+  abstract: string;
 }
 
 export interface TocEntry {

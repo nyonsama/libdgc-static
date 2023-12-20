@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import Head from "../components/Head";
 import PostList, { Pagination } from "../components/PostList";
 import { Post } from "../types";

@@ -5,6 +5,7 @@ import IconToc from "../components/IconToc";
 import Footer from "../components/Footer";
 import Link from "../components/Link";
 import Script from "../components/Script";
+import IconCalendar from "../components/IconCalendar";
 
 const clientCode = () => {
   let showSidebar = false;
@@ -78,7 +79,10 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
                 {/* title */}
                 <h1>{post.metadata.title}</h1>
                 <div className="not-prose flex">
-                  <div className="mr-4">{post.metadata.createDate}</div>
+                  <div className="mr-4">
+                    <IconCalendar className="mr-2 inline-block h-full w-[18px] align-top" />
+                    {post.metadata.createDate}
+                  </div>
                   {/* tags */}
                   <div className="not-prose flex gap-2 text-gray-400">
                     {post.metadata.tags?.map((tag, i) => (

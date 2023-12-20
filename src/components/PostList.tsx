@@ -1,6 +1,7 @@
 import { FC, Fragment } from "react";
 import { Post } from "../types";
 import classNames from "classnames";
+import IconCalendar from "./IconCalendar";
 
 export interface Pagination {
   current: number;
@@ -14,7 +15,7 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
   return (
     <div className="flex flex-col pt-4">
       <hr className="border-zinc-700" />
-      {posts.map(({ metadata, path, html }, index) => (
+      {posts.map(({ metadata, path, html, abstract }, index) => (
         <Fragment key={index}>
           <article className="mb-4 mt-4 flex flex-col">
             <h3 className="mb-2">
@@ -27,7 +28,7 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
             </h3>
 
             <div className="mb-2 line-clamp-3 text-sm text-gray-400">
-              {html.slice(0, 500).replace(/<\/?.+?(>|$)/g, " ")}
+              {abstract.slice(0, 200)}
             </div>
 
             <div className="flex justify-between text-sm">
