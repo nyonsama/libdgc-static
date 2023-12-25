@@ -79,7 +79,7 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
             "align-baseline",
             "not-prose",
           ],
-          src: "/external-link.svg",
+          src: "/assets/img/external-link.svg",
         });
         node.children.push(icon);
       }

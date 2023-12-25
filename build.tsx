@@ -137,7 +137,7 @@ const copyPublicFiles = async () => {
     for (const fileName of files) {
       const filePath = path.join(paths.public, fileName);
       const distFilePath = path.join(paths.dist, fileName);
-      await fs.cp(filePath, distFilePath);
+      await fs.cp(filePath, distFilePath, { recursive: true });
     }
   } catch (err) {
     console.error(err);
