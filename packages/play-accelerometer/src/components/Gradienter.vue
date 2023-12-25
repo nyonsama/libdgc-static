@@ -155,6 +155,7 @@ class Vector3 {
     return new Vector3(this.x, this.y, this.z);
   }
 
+  // 用四元数旋转一个向量
   rotateQuaternion(q: Quaternion) {
     const { x, y, z } = this;
     const product = q
@@ -166,18 +167,18 @@ class Vector3 {
 
 const api = ref<"GravitySensor" | "DeviceMotion">("GravitySensor");
 
-// 定义两个坐标系：地面坐标系、偏移坐标系
+// 定义两个坐标系：设备坐标系、偏移坐标系
 // 初始状态下，两个坐标系是重合的
 // 点击“将当前状态视为水平”后，将偏移坐标系z轴旋转到和此时的加速度重合
 
-// 从传感器拿到的三个轴上的加速度（相对于地面的加速度）
+// 从传感器拿到的三个轴上的加速度（相对于设备的加速度）
 const acceleration = ref(new Vector3(0, 0, 0));
 // 水平状态的加速度（已经归一化）
 const initialAccelerationNormalized = new Vector3(0, 0, 1);
-// 与偏移坐标系z轴重合的加速度（相对于地面坐标系）（已经归一化）
+// 与偏移坐标系z轴重合的加速度（相对于设备坐标系）（已经归一化）
 const baseAccelerationNormalized = ref(initialAccelerationNormalized.clone());
 
-// 将地面坐标系旋转到偏移坐标系的四元数
+// 将设备坐标系旋转到偏移坐标系的四元数
 const offsetQuaternion = computed(() => {
   const base = baseAccelerationNormalized.value;
   return Quaternion.fromAxisRadian(
