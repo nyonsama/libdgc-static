@@ -1,5 +1,4 @@
 import type hast from "hast";
-import rehypeRaw from "rehype-raw";
 import { Processor, Compiler, unified } from "unified";
 import { visit } from "unist-util-visit";
 import { inlineTags } from "./compressPunctuation";

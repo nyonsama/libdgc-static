@@ -8,13 +8,16 @@
 @tailwind utilities;
 
 * {
-  color-scheme: dark;
   scroll-behavior: smooth;
 }
 
 :root {
-  /* min-height: 100vh; */
-  @apply bg-zinc-900 text-gray-300;
+  @apply h-full bg-zinc-900 text-gray-300;
+  color-scheme: only dark;
+}
+
+body {
+  @apply h-full;
 }
 
 .prose a:hover:not(a[class~="not-prose"]) {
