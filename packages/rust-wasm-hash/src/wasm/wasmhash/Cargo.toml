@@ -1,0 +1,38 @@
+[package]
+name = "wasmhash"
+version = "0.1.0"
+authors = ["ivnm <ivnmp1020619738@gmail.com>"]
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["console_error_panic_hook"]
+
+[dependencies]
+wasm-bindgen = { version = "0.2.89" }
+
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.7", optional = true }
+sha1 = "0.10.6"
+sha2 = "0.10.8"
+md-5 = { version = "0.10.6", features = [], default-features = false }
+sm3 = "0.4.2"
+web-sys = { version = "0.3.66", features = ["Window", "Document", "console"] }
+js-sys = "0.3.66"
+wasm-bindgen-futures = "0.4.39"
+futures = "0.3.30"
+wasm-streams = "0.4.0"
+digest = "0.10.7"
+faster-hex = "0.9.0"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.39"
+
+
+# [profile.release]
+# opt-level = "s"

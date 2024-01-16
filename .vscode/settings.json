@@ -2,6 +2,7 @@
     "livePreview.serverRoot": "dist",
     "typescript.tsdk": "node_modules/typescript/lib",
     "cSpell.words": [
+        "bindgen",
         "bunx",
         "codepaths",
         "frontmatter",
