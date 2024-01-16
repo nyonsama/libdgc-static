@@ -62,8 +62,9 @@ const getLastTextNode = (node: hast.Element): hast.Text | null => {
 const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
   visit(tree, "element", (node) => {
     if (node.tagName === "a") {
-      const { href } = node.properties;
-      if (typeof href === "string" && href.match(/^[0-9a-zA-Z\-+._]+:/)) {
+      const href = String(node.properties.href);
+      const target = node.properties.target;
+      if (href.match(/^[0-9a-zA-Z\-+._]+:/) || target === "_blank") {
         node.properties.target = "_blank";
         const lastText = getLastTextNode(node);
         // 挤压图标前面的全角标点
@@ -83,6 +84,7 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
           src: "/assets/img/external-link.svg",
         });
         node.children.push(icon);
+        node.children.push({ type: "text", value: " " });
       }
     }
   });
