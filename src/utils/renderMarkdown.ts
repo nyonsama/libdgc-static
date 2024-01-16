@@ -64,6 +64,7 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
     if (node.tagName === "a") {
       const { href } = node.properties;
       if (typeof href === "string" && href.match(/^[0-9a-zA-Z\-+._]+:/)) {
+        node.properties.target = "_blank";
         const lastText = getLastTextNode(node);
         // 挤压图标前面的全角标点
         // 可能覆盖不了所有情况

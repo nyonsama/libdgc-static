@@ -6,7 +6,7 @@
   "scripts": {
     "build": "bun run build.tsx",
     "serve": "http-server dist -p 7789",
-    "tailwind": "tailwindcss -i ./src/style.css -o ./dist/style.css --watch"
+    "tailwind": "tailwindcss -i ./src/style.css -o ./dist/style.css --watch --minify"
   },
   "keywords": [],
   "author": "",

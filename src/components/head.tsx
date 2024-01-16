@@ -16,7 +16,7 @@ const Head: FC<HeadProps> = ({ title = "libdgc.club", children } = {}) => {
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
     </>,
   );
-  const notoCss = `<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />`;
+  const notoCss = `<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />`;
   return (
     <head
       dangerouslySetInnerHTML={{
