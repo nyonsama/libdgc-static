@@ -67,13 +67,13 @@ export default defineConfig({
 
 这个配置使用 ES Module 导入 Worker 的代码和 WASM 模块，需要比较新的浏览器才能跑。要兼容老浏览器就得改改了。
 
-### WASM Debug
+### Debug WASM
 
 ⚠️ 此处有个小坑：目前（2024 年 1 月 15 日）wasm-pack 还不支持输出带有调试信息的 wasm 文件（[issue #1351](https://github.com/rustwasm/wasm-pack/issues/1351)），解决办法见 [VSCode 文档](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_debugging-webassembly)。
 
 只要编译器生成了debug信息，理论上可以使用 Chrome 或 VSCode 来 debug。但是两者目前都不成熟，并且需要安装额外的插件。
 
-#### Chrome
+#### 使用 Chrome debug WASM
 
 安装了 [C/C++ DevTools Support (DWARF)](https://goo.gle/wasm-debugging-extension) Chrome 插件即可。[调试 C/C++ WebAssembly](https://developer.chrome.com/docs/devtools/wasm?hl=zh-cn)（Chrome 文档）有详细的说明。虽然没有提到 Rust，不过撞上插件后，也能给 Rust 下断点，如图。
 
@@ -81,7 +81,7 @@ export default defineConfig({
 
 一个显而易见的缺点是没有语法高亮。此外提供的信息也比较基本。
 
-#### VSCode
+#### 使用 VS Code debug WASM
 
 [VSCode 文档](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_debugging-webassembly)给出了详细的说明。简要概括就是安装[插件](https://marketplace.visualstudio.com/items?itemName=ms-vscode.wasm-dwarf-debugging)，然后让 VSCode 启动 Chrome。
 
@@ -97,7 +97,7 @@ export default defineConfig({
 
 出于比较和闲得慌，这里使用了三种后端：原生、wasm、js。
 
-### 浏览器原生 API
+### 使用浏览器原生 API 计算哈希
 
 现代浏览器提供了 `SubtleCrypto.digest()`来计算哈希。（[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/SubtleCrypto/digest)）
 
@@ -117,7 +117,7 @@ const hash: ArrayBuffer = await crypto.subtle.digest("SHA-256", data);
   - 不能展示计算进度
 - 返回的哈希值是 ArrayBuffer，需要自己转换成 hex
 
-### WASM
+### 使用 WASM 计算哈希
 
 [RustCrypto/hashes](https://github.com/RustCrypto/hashes) 记录了 Rust 生态中各种哈希函数的包，并且它们都实现了同一个接口，使用起来比较方便。以 MD5 为例：
 
@@ -142,7 +142,7 @@ let result = hasher.finalize();
 let mut hasher = <Md5 as Digest>::new();
 ```
 
-### 纯JS
+### 使用纯 JS 计算哈希
 
 目前使用最广泛的包大概是 [crypto-js](https://www.npmjs.com/package/crypto-js)。支持很多种哈希，并且自带 hex 编码，但它很老旧，不支持处理 `ArrayBuffer` 和 `TypedArray` 之类的数据。
 
@@ -175,7 +175,7 @@ let mut hasher = <Md5 as Digest>::new();
 
 展示计算进度、同时计算多个文件 -->
 
-### 并行 WASM
+### 在 WASM 中使用并行
 
 Native 和纯 JS 后端比较好处理，用 Web Worker 就可以了。WASM 有一些坑，需要斟酌一下。
 
