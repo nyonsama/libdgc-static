@@ -81,3 +81,7 @@ body {
 .halt {
   font-feature-settings: "halt";
 }
+
+.post img {
+  @apply relative cursor-pointer transition-transform;
+}

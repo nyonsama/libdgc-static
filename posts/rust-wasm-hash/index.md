@@ -14,7 +14,7 @@ tags: ["Web", "玩具", "WASM", "Rust"]
 
 ⚠️ 由于代码未经优化、操作系统的调度、CPU 大小核等因素，这个不能用来精确比较 WASM 与纯 JS 的性能差异。
 
-<iframe style="width:100%;height:800px" src="./dist/index.html"></iframe>
+<iframe style="width:100%;min-height:400px;height:80vh;" src="./dist/index.html"></iframe>
 
 [仓库地址](https://github.com/nyonsama/libdgc-static/tree/main/packages/rust-wasm-hash)
 

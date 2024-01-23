@@ -10,7 +10,7 @@ export interface ListPageProps {
 }
 const ListPage: FC<ListPageProps> = ({ pagination, posts }) => {
   return (
-    <html>
+    <html lang="zh">
       <Head title={`文章列表-第${pagination.current + 1}页`} />
       <body>
         <div className="flex min-h-full flex-col">
