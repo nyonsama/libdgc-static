@@ -1,6 +1,6 @@
 import defaultTheme from "tailwindcss/defaultTheme";
+import type { Config } from "tailwindcss";
 
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./build.tsx", "./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
@@ -15,4 +15,4 @@ export default {
     },
   },
   plugins: [require("@tailwindcss/typography")],
-};
+} as Config;

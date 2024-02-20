@@ -1,17 +1,26 @@
-import React, { FC, PropsWithChildren, createElement } from "react";
+import React, { FC, PropsWithChildren, createElement, useContext } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { RenderContext } from "../contexts/renderContext";
 interface HeadProps extends PropsWithChildren {
   title?: string;
 }
 
 const Head: FC<HeadProps> = ({ title = "libdgc.club", children } = {}) => {
+  const { assetPaths } = useContext(RenderContext);
+  const { css, js } = assetPaths;
   const tags = renderToStaticMarkup(
     <>
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content="#000000" />
       <title>{title}</title>
       {children}
-      <link href="/style.css" rel="stylesheet" />
+      {css.map((path, index) => (
+        <link href={path} key={index} rel="stylesheet" />
+      ))}
+      {js.map((path, index) => (
+        <script src={path} key={index} type="module"></script>
+      ))}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
     </>,

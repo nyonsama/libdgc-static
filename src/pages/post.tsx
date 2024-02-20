@@ -8,6 +8,50 @@ import Script from "../components/Script";
 import IconCalendar from "../components/IconCalendar";
 
 const clientCode = () => {
+  let lastWindowScrollY = window.scrollY;
+  let scrollState: "stopped" | "up" | "down" = "stopped";
+  window.addEventListener("scroll", () => {
+    const delta = window.scrollY - lastWindowScrollY;
+    let currentState = "stopped";
+    if (delta > 0) {
+      scrollState = "down";
+    } else if (delta < 0) {
+      scrollState = "up";
+    }
+    if (currentState !== scrollState) {
+      if (currentState === "up") {
+        // hide
+      } else if (currentState === "down") {
+        // show
+        // 怎样show还要考虑
+      }
+    }
+    lastWindowScrollY = window.scrollY;
+  });
+  window.addEventListener("scrollend", () => {
+    scrollState = "stopped";
+  });
+  // 目前还用不到computed
+  // const state = {
+  //   backdropState: {
+  //     state: "",
+  //     subscribers: [(value: string) => console.log(value)],
+  //     get() {
+  //       return this.state;
+  //     },
+  //     set(value: string) {
+  //       this.state = value;
+  //       for (const fn of this.subscribers) {
+  //         fn(this.state);
+  //       }
+  //     },
+  //   },
+  //   dispatch() {},
+  //   subscribe() {},
+  // };
+
+  // const sidebarElement = document.querySelector("#sidebar")!;
+
   const $ = document.querySelector.bind(document);
 
   const sidebar = {
@@ -222,9 +266,7 @@ export interface PostPageProps {
 export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
   return (
     <html lang="zh">
-      <Head title={post.metadata.title}>
-        <link href="/github-dark.min.css" rel="stylesheet" />
-      </Head>
+      <Head title={post.metadata.title}></Head>
       <body>
         <div className="flex min-h-full flex-col ">
           {/* navbar */}
@@ -232,12 +274,16 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
             id="navbar"
             className="sticky top-0 z-30 flex justify-center bg-black transition-transform"
           >
-            <div className="mx-4 flex h-12 flex-1 flex-row items-center justify-between sm:max-w-2xl lg:max-w-4xl">
-              <a href="/">libdgc</a>
-              <IconToc
+            <div className="flex h-12 flex-1 flex-row items-center justify-between sm:max-w-2xl lg:max-w-4xl">
+              <a href="/" className="ml-4">
+                libdgc
+              </a>
+              <div
                 id="button-show-toc"
-                className="h-6 w-6 cursor-pointer lg:hidden"
-              />
+                className="flex h-12 w-12 cursor-pointer items-center justify-center lg:hidden"
+              >
+                <IconToc className="h-6 w-6" />
+              </div>
             </div>
           </nav>
           <div className="flex flex-1 flex-col items-center px-4 py-8">
@@ -269,7 +315,7 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
                 </div>
               </aside>
               {/* post body */}
-              <main className="prose prose-invert max-w-full flex-1 prose-headings:text-gray-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2">
+              <main className="prose prose-invert prose-headings:text-gray-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2 max-w-full flex-1">
                 {/* title */}
                 <h1>{post.metadata.title}</h1>
                 <div className="not-prose flex">
