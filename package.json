@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "bun run build.tsx",
+    "watch": "bun --hot build.tsx",
     "serve": "http-server dist -p 7789",
-    "tailwind": "tailwindcss -i ./src/style.css -o ./public/assets/css/style.css --watch --minify"
+    "tailwind": "tailwindcss -i ./src/style.css -o ./temp/style.css --watch --minify"
   },
   "keywords": [],
   "author": "",

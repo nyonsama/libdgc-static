@@ -162,4 +162,5 @@ export const renderAllPages = async () => {
     renderIndexPage(postDataList),
     renderListPages(postDataList),
   ]);
+  // TODO: 每次修改代码都都重新渲染所有post会不会慢
 };
