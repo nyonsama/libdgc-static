@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from "vue";
+import { computed, onUnmounted, ref, shallowRef, watch } from "vue";
 
 const { sin, PI, sqrt, acos, cos } = Math;
 const rad2deg = (rad: number) => (rad / (2 * PI)) * 360;
@@ -247,24 +247,32 @@ const intervalId = setInterval(() => {
 
 const hasDeviceMotion = ref(typeof DeviceMotionEvent !== "undefined");
 const hasGravitySensor = ref(typeof GravitySensor !== "undefined");
-const hasPermission = ref(false);
+const hasSensorPermission = ref(false);
+const hasDeviceMotionPermission = ref(
+  hasDeviceMotion.value && !Reflect.has(DeviceMotionEvent, "requestPermission"),
+);
 
 const gravityRef = shallowRef<GravitySensor | null>(null);
-
-const relativeOrientationSensorQuaternion = ref(new Quaternion(0, 0, 0, 0));
-onMounted(() => {
-  const ros = new RelativeOrientationSensor({ frequency: 60 });
-  ros.onreading = () => {
-    const [x, y, z, w] = ros.quaternion ?? [0, 0, 0, 1];
-    relativeOrientationSensorQuaternion.value = new Quaternion(x, y, z, w);
-  };
-  ros.start();
-});
 
 watch(
   [api],
   async () => {
     if (api.value === "DeviceMotion") {
+      if (hasDeviceMotionPermission.value === false) {
+        try {
+          // @ts-ignore
+          const resp = await DeviceMotionEvent.requestPermission();
+          if (resp === "granted") {
+            hasDeviceMotionPermission.value = true;
+          } else {
+            return;
+          }
+        } catch (error) {
+          console.log(error);
+          return;
+        }
+      }
+
       gravityRef.value?.stop();
       window.ondevicemotion = (event) => {
         sampleCount += 1;
@@ -272,14 +280,22 @@ watch(
         acceleration.value = new Vector3(x ?? 0, y ?? 0, z ?? 0);
       };
     } else if (api.value === "GravitySensor") {
-      window.ondevicemotion = null;
-      const permissionStatus = await navigator.permissions.query({
-        name: "accelerometer" as unknown as PermissionName,
-      });
-      if (permissionStatus.state !== "granted") {
+      if (!hasGravitySensor.value) {
         return;
       }
-      hasPermission.value = true;
+      window.ondevicemotion = null;
+      try {
+        const permissionStatus = await navigator.permissions.query({
+          name: "accelerometer" as unknown as PermissionName,
+        });
+        if (permissionStatus.state !== "granted") {
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+      hasSensorPermission.value = true;
       const gravity = new GravitySensor({ frequency: 1000 });
       gravityRef.value = gravity;
       gravity.addEventListener("reading", () => {
@@ -311,10 +327,13 @@ onUnmounted(() => {
   <div v-if="api == 'DeviceMotion' && !hasDeviceMotion">
     你的浏览器不支持DeviceMotion
   </div>
+  <div v-else-if="api == 'DeviceMotion' && !hasDeviceMotionPermission">
+    没有使用DeviceMotion的权限
+  </div>
   <div v-else-if="api === 'GravitySensor' && !hasGravitySensor">
     你的浏览器不支持GravitySensor
   </div>
-  <div v-else-if="api === 'GravitySensor' && !hasPermission">
+  <div v-else-if="api === 'GravitySensor' && !hasSensorPermission">
     没有使用GravitySensor的权限
   </div>
   <div v-else>

@@ -4,19 +4,23 @@ createDate: "2023-12-25"
 tags: ["Web", "玩具"]
 ---
 
+## 2024-03-05更新
+
+iOS Safari可以使用`devicemotion`，详见下文
+
 ## 简介
 
 为了试玩 Vue3 和浏览器的传感器 API 做了这个东西。
 
 ## Showcase
 
-请使用手机查看。~~不支持 Safari~~
+请使用手机查看。
 
 <iframe style="width:100%;height:600px" src="./dist/index.html"></iframe>
 
 ## 如何实现
 
-读传感器数据，处理后展示到页面上
+挑选API读传感器数据，转换成 CSS transform 展示到页面上
 
 ### 读传感器
 
@@ -31,7 +35,7 @@ tags: ["Web", "玩具"]
 
 其他用不到的就不列在这里了。
 
-在上面几个 API 中，Safari 出于隐私问题，哪个都不支持；Firefox 只支持前两个事件；Chrome 全都支持。
+在上面几个 API 中，Safari ~~出于隐私问题，哪个都不支持~~和 Firefox 支持前两个事件；Chrome 全都支持。其中 Safari 需要调用`DeviceMotionEvent.requestPermission()`请求权限后才能使用。
 
 实现水平仪需要计算设备与水平面的夹角。用这 4 个 API 中任意一个都可以，不过默认使用 `GravitySensor`、使用 `devicemotion` 兜底最合适。原因：
 
