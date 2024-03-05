@@ -1,11 +1,6 @@
 @import "../node_modules/highlight.js/styles/github-dark.min.css";
 
 @font-face {
-  font-family: "Zhudou Sans";
-  src: url(/assets/fonts/ZhudouSansVF.woff2);
-}
-
-@font-face {
   font-family: "Hack";
   src: url("/assets/fonts/hack-regular-subset.woff2") format("woff2");
   font-weight: 400;
@@ -39,15 +34,16 @@
 
 * {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {
-  @apply h-full bg-zinc-900 text-gray-300;
+  @apply h-full bg-black text-gray-300;
   color-scheme: only dark;
 }
 
 body {
-  @apply h-full;
+  @apply min-h-full bg-zinc-900;
 }
 
 .prose a:hover:not(a[class~="not-prose"]) {
@@ -86,4 +82,12 @@ body {
 
 .post img {
   @apply relative cursor-pointer transition-transform;
+}
+
+.prose figure {
+  @apply relative flex flex-col items-center;
+}
+
+.compress {
+  @apply -mr-[0.5em];
 }

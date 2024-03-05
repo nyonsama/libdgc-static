@@ -10,7 +10,7 @@ import rehypeHighlight from "rehype-highlight";
 import type hast from "hast";
 import type mdast from "mdast";
 import type { VFile } from "vfile";
-import { visit } from "unist-util-visit";
+import { SKIP, visit } from "unist-util-visit";
 import { toHtml } from "hast-util-to-html";
 import { matter } from "vfile-matter";
 import rehypePresetMinify from "rehype-preset-minify";
@@ -20,6 +20,11 @@ import {
   allCompressibleCharacters,
   rehypeCompressPunctuation,
 } from "./compressPunctuation";
+import path from "path";
+import { promisify } from "util";
+import _sizeOf from "image-size";
+
+const sizeOf = promisify(_sizeOf);
 
 const remarkRemoveTitle = () => (tree: mdast.Root, file: VFile) => {
   let titleIndex = tree.children.findIndex(
@@ -28,6 +33,83 @@ const remarkRemoveTitle = () => (tree: mdast.Root, file: VFile) => {
   if (titleIndex !== -1) {
     tree.children.splice(titleIndex, 1);
   }
+};
+
+const rehypeImgSize =
+  (options: { basePath: string }) => async (tree: hast.Root, file: VFile) => {
+    const imgFileMap = new Map<
+      string,
+      { width: number; height: number } | null
+    >();
+    visit(tree, "element", (node) => {
+      const { src } = node.properties;
+      if (node.tagName === "img" && typeof src === "string") {
+        imgFileMap.set(src, null);
+      }
+    });
+    for (const [src] of imgFileMap) {
+      const imgPath = path.join(options.basePath, src);
+      const result = (await sizeOf(imgPath))!;
+      if (result.images) {
+        // 对于ico等包含多种大小的图片，取最大的
+        const { width, height } = result.images.reduce((prev, curr) => {
+          if (curr.height! * curr.width! > prev.height! * prev.width!) {
+            return curr;
+          } else {
+            return prev;
+          }
+        });
+        imgFileMap.set(src, { width: width!, height: height! });
+      } else {
+        const { width, height } = result;
+        imgFileMap.set(src, { width: width!, height: height! });
+      }
+    }
+    visit(tree, "element", (node) => {
+      const { src } = node.properties;
+      if (node.tagName === "img" && typeof src === "string") {
+        const { height, width } = imgFileMap.get(src)!;
+        node.properties.height = height;
+        node.properties.width = width;
+      }
+    });
+  };
+
+// 给img包上figure
+const rehypeWrapImg = () => (tree: hast.Root, file: VFile) => {
+  visit(tree, "element", (node) => {
+    for (let index = 0; index < node.children.length; index++) {
+      const child = node.children[index];
+      if (child.type === "element" && child.tagName === "img") {
+        const caption = child.properties.alt;
+        if (typeof caption === "string") {
+          child.properties.title ??= caption;
+        }
+        // 手动设置了class或style的话就不处理
+        if (!child.properties.class && !child.properties.style) {
+          const figure = h("figure", {}, [child]);
+          if (typeof caption === "string") {
+            figure.children.push(h("figcaption", {}, [caption]));
+          }
+          node.children[index] = figure;
+        }
+      }
+    }
+    return SKIP;
+  });
+};
+
+const rehypeImgAltText = () => (tree: hast.Root, file: VFile) => {
+  visit(tree, "element", (node) => {
+    for (let index = 0; index < node.children.length; index++) {
+      const child = node.children[index];
+      if (child.type === "element" && child.tagName === "img") {
+        node.children.splice(index + 1, 0, h(""));
+        node.children[index] = h("div", {}, [child]);
+      }
+    }
+    return SKIP;
+  });
 };
 
 const rehypeExtractToc = () => (tree: hast.Root, file: VFile) => {
@@ -90,7 +172,7 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
   });
 };
 
-export const renderMarkdown = async (markdown: string) => {
+export const renderMarkdown = async (markdown: string, basePath: string) => {
   const vf = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, { type: "yaml", marker: "-" })
@@ -101,6 +183,8 @@ export const renderMarkdown = async (markdown: string) => {
     .use(rehypeRaw) // parse raw html in markdown
     .use(rehypeSlug) // add id to headings
     .use(rehypeExtractToc) // export a toc object
+    .use(rehypeImgSize, { basePath })
+    .use(rehypeWrapImg)
     .use(rehypeExternalAnchor)
     .use(rehypeCompressPunctuation)
     .use(rehypeHighlight)

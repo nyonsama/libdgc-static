@@ -3,6 +3,8 @@ import { h } from "hastscript";
 import { visitParents, SKIP } from "unist-util-visit-parents";
 import { VFile } from "vfile";
 
+// 标点挤压：https://www.uisdc.com/chinese-typesetting-3-principle
+
 export const inlineTags = [
   "a",
   "abbr",
@@ -18,24 +20,24 @@ export const inlineTags = [
   "time",
   "var",
 ];
-const 开始夹注符 = "（「【《“‘";
-const 结束夹注符 = "）」】》”’";
+const 开始夹注符 = "（「【《〈";
+const 结束夹注符 = "）」】〉》";
 const 顿号句号逗号 = "、。，";
 const 分号冒号 = "；：";
 
 export const allCompressibleCharacters =
   开始夹注符 + 结束夹注符 + 顿号句号逗号 + 分号冒号;
 
-export const compressibleRegexp = new RegExp(
+export const compressibleRegexpString =
   "(" +
-    [
-      `[${结束夹注符}][${开始夹注符}${顿号句号逗号}${分号冒号}]`,
-      `[${开始夹注符}][${开始夹注符}]`,
-      `[${顿号句号逗号}][${开始夹注符}${结束夹注符}]`,
-      `[${分号冒号}][${开始夹注符}]`,
-    ].join(")|(") +
-    ")",
-);
+  [
+    `[${结束夹注符}][${开始夹注符}${结束夹注符}${顿号句号逗号}${分号冒号}]`,
+    `[${开始夹注符}][${开始夹注符}]`,
+    `[${顿号句号逗号}][${开始夹注符}${结束夹注符}]`,
+    `[${分号冒号}][${开始夹注符}]`,
+  ].join(")|(") +
+  ")";
+const compressibleRegexp = new RegExp(compressibleRegexpString);
 export const isCompressible = (str: string) => compressibleRegexp.test(str);
 
 export const rehypeCompressPunctuation =
@@ -56,7 +58,7 @@ export const rehypeCompressPunctuation =
         parent.type === "element" &&
         parent.tagName === "span" &&
         Array.isArray(parent.properties.className) &&
-        parent.properties.className.includes("cjk-halt")
+        parent.properties.className.includes("compress")
       ) {
         return [SKIP];
       }
@@ -83,12 +85,11 @@ export const rehypeCompressPunctuation =
         lastText.parent.children.splice(
           childIndex + 1,
           0,
-          h("span", { class: "halt" }, [lastValue.at(-1)]),
+          h("span", { class: "compress" }, [lastValue.at(-1)]),
         );
         lastText.node.value = lastValue.slice(0, lastValue.length - 1);
       } else if (isCompressible(node.value)) {
         // 当前节点内有标点可以挤压
-        // NOTE: 引入了煮豆字体后或许不需要这个了
         const match = node.value.match(compressibleRegexp)!;
 
         const matchIndex = match.index ?? node.value.indexOf(match[0]);
@@ -102,7 +103,7 @@ export const rehypeCompressPunctuation =
             value: head,
           });
         }
-        newNodes.push(h("span", { class: "halt" }, [match[0][0]]));
+        newNodes.push(h("span", { class: "compress" }, [match[0][0]]));
         const tail = node.value.slice(matchIndex + 1);
         if (tail.length > 0) {
           newNodes.push({

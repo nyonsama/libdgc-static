@@ -1,11 +1,19 @@
 import path from "path";
 import fs from "node:fs/promises";
+// import postPath from "../client/post.ts?file";
 
 // TODO: 嵌套的页面（a/b/c.html）怎样处理
+// 好像已经可以处理了？
 
 export const bundleClientJs = async () => {
   // NOTE: 新增有js的页面时，手动把入口添加到这里
+  // const entrypoints = [postPath];
   const entrypoints = ["src/client/post.ts"];
+  // HACK: 让bun watch能探测src/client的改动
+  // TODO: 等 https://github.com/oven-sh/bun/issues/4689 实现了就把这个不靠谱的方法改掉
+  Promise.allSettled(entrypoints.map((path) => import(`../../${path}`))).catch(
+    (e) => {},
+  );
   const { outputs, success, logs } = await Bun.build({
     entrypoints,
     outdir: path.join("dist", "assets", "js"),
@@ -13,11 +21,8 @@ export const bundleClientJs = async () => {
     sourcemap: "external",
     splitting: true,
     target: "browser",
-    minify: true,
+    // minify: true,
     naming: "[dir]/[name]-[hash].[ext]",
-    loader: {
-      ".css": "file",
-    },
   });
   if (!success) {
     for (const log of logs) {

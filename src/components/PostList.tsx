@@ -2,6 +2,7 @@ import { FC, Fragment } from "react";
 import { Post } from "../types";
 import classNames from "classnames";
 import IconCalendar from "./IconCalendar";
+import CompressPunctuation from "./CompressPunctuation";
 
 export interface Pagination {
   current: number;
@@ -28,7 +29,7 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
             </h3>
 
             <div className="mb-2 line-clamp-3 text-sm text-gray-400">
-              {abstract.slice(0, 200)}
+              <CompressPunctuation text={abstract.slice(0, 250)} />
             </div>
 
             <div className="flex justify-between text-sm">

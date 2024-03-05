@@ -34,11 +34,11 @@ export const copyModifiedFiles = async (src: string, dest: string) => {
         await fs.copyFile(srcPath, destPath);
         console.log(`updated: ${destPath}`);
       } else {
-        console.log(`ignore: ${destPath}`);
+        // console.log(`ignore: ${destPath}`);
       }
     } else {
       await fs.copyFile(srcPath, destPath);
-      console.log(`copied: ${destPath}`);
+      console.log(`new file: ${destPath}`);
     }
   }
 };

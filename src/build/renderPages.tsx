@@ -60,7 +60,7 @@ const renderPage = async (
 const renderPost = async (postPath: string) => {
   const filePath = path.join(postPath, "index.md");
   const mdString = (await fs.readFile(filePath)).toString("utf8");
-  const { frontMatter, toc, html } = await renderMarkdown(mdString);
+  const { frontMatter, toc, html } = await renderMarkdown(mdString, postPath);
   if (!frontMatter.title) {
     throw new Error(`${postPath} title is empty`);
   }
@@ -100,7 +100,11 @@ const renderPostPages = async () => {
 
     // copy post assets
     const postDistPath = path.join("dist", "posts", post);
-    await fs.cp(postSourcePath, postDistPath, { recursive: true });
+    // Bun issue #9124: 递归cp相对路径会报错，这里拼成绝对路径
+    // TODO: 等bun修复之后改回相对路径
+    await fs.cp(`${process.cwd()}/${postSourcePath}`, postDistPath, {
+      recursive: true,
+    });
 
     // remove markdown file
     const indexMdPath = path.join(postDistPath, "index.md");
@@ -149,6 +153,8 @@ const renderListPages = async (postDataList: IndexProps["posts"]) => {
   await Promise.all(renderTasks);
 };
 
+// TODO: 实现一个assets getter，只在需要js或css的时候等待
+// 可能用处不太大？
 let cssBundlePath: string | null = null;
 export const renderAllPages = async () => {
   const cssFiles = await fs.readdir("dist/assets/css");
