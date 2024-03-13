@@ -13,7 +13,7 @@ export interface PostPageProps {
 export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
   return (
     <html lang="zh">
-      <Head title={post.metadata.title}></Head>
+      <Head title={`${post.metadata.title} - libdgc.club`}></Head>
       <body>
         <div className="flex min-h-full flex-col ">
           {/* navbar */}

@@ -99,16 +99,11 @@ const rehypeWrapImg = () => (tree: hast.Root, file: VFile) => {
   });
 };
 
-const rehypeImgAltText = () => (tree: hast.Root, file: VFile) => {
+const rehypeIFrameTitle = () => (tree: hast.Root, file: VFile) => {
   visit(tree, "element", (node) => {
-    for (let index = 0; index < node.children.length; index++) {
-      const child = node.children[index];
-      if (child.type === "element" && child.tagName === "img") {
-        node.children.splice(index + 1, 0, h(""));
-        node.children[index] = h("div", {}, [child]);
-      }
+    if (node.tagName === "iframe") {
+      node.properties.title ??= "showcase";
     }
-    return SKIP;
   });
 };
 
@@ -164,6 +159,7 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
             "not-prose",
           ],
           src: "/assets/img/external-link.svg",
+          alt: "外部链接",
         });
         node.children.push(icon);
         node.children.push({ type: "text", value: " " });
@@ -184,7 +180,8 @@ export const renderMarkdown = async (markdown: string, basePath: string) => {
     .use(rehypeSlug) // add id to headings
     .use(rehypeExtractToc) // export a toc object
     .use(rehypeImgSize, { basePath })
-    .use(rehypeWrapImg)
+    .use(rehypeWrapImg) // wrap <img> with <figure>
+    .use(rehypeIFrameTitle)
     .use(rehypeExternalAnchor)
     .use(rehypeCompressPunctuation)
     .use(rehypeHighlight)

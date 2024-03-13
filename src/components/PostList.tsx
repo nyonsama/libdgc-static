@@ -19,14 +19,14 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
       {posts.map(({ metadata, path, html, abstract }, index) => (
         <Fragment key={index}>
           <article className="mb-4 mt-4 flex flex-col">
-            <h3 className="mb-2">
+            <h2 className="mb-2">
               <a
                 className="text-xl text-[#74b0e4] underline-offset-2 hover:underline"
                 href={path}
               >
                 {metadata.title}
               </a>
-            </h3>
+            </h2>
 
             <div className="mb-2 line-clamp-3 text-sm text-gray-400">
               <CompressPunctuation text={abstract.slice(0, 250)} />
