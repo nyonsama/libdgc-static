@@ -21,7 +21,7 @@ export const bundleClientJs = async () => {
     sourcemap: "external",
     splitting: true,
     target: "browser",
-    // minify: true,
+    minify: true,
     naming: "[dir]/[name]-[hash].[ext]",
   });
   if (!success) {

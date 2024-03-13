@@ -100,11 +100,19 @@ const renderPostPages = async () => {
 
     // copy post assets
     const postDistPath = path.join("dist", "posts", post);
-    // Bun issue #9124: 递归cp相对路径会报错，这里拼成绝对路径
-    // TODO: 等bun修复之后改回相对路径
-    await fs.cp(`${process.cwd()}/${postSourcePath}`, postDistPath, {
-      recursive: true,
-    });
+    const postDirContent = await fs.readdir(postSourcePath);
+    const cpTasks = postDirContent
+      .filter((path) => path !== "index.md" && path !== "build.sh")
+      .map(async (path) => {
+        // Bun issue #9124: 递归cp相对路径会报错，这里拼成绝对路径
+        // TODO: 等bun修复之后改回相对路径
+        await fs.cp(
+          `${process.cwd()}/${postSourcePath}/${path}`,
+          `${postDistPath}/${path}`,
+          { recursive: true },
+        );
+      });
+    await Promise.all(cpTasks);
 
     // remove markdown file
     const indexMdPath = path.join(postDistPath, "index.md");
