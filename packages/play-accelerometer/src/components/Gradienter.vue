@@ -248,9 +248,8 @@ const intervalId = setInterval(() => {
 const hasDeviceMotion = ref(typeof DeviceMotionEvent !== "undefined");
 const hasGravitySensor = ref(typeof GravitySensor !== "undefined");
 const hasSensorPermission = ref(false);
-const hasDeviceMotionPermission = ref(
-  hasDeviceMotion.value && !Reflect.has(DeviceMotionEvent, "requestPermission"),
-);
+const isIOSSafari = Reflect.has(DeviceMotionEvent, "requestPermission");
+const hasDeviceMotionPermission = ref(hasDeviceMotion.value && !isIOSSafari);
 
 const gravityRef = shallowRef<GravitySensor | null>(null);
 
@@ -278,6 +277,9 @@ watch(
         sampleCount += 1;
         const { x, y, z } = event.accelerationIncludingGravity ?? {};
         acceleration.value = new Vector3(x ?? 0, y ?? 0, z ?? 0);
+        if (isIOSSafari) {
+          acceleration.value = acceleration.value.multiplyScalar(-1);
+        }
       };
     } else if (api.value === "GravitySensor") {
       if (!hasGravitySensor.value) {

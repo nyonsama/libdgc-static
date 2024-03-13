@@ -42,7 +42,7 @@ iOS Safari可以使用`devicemotion`，详见下文
 - `GravitySensor` 只使用加速度传感器；而另外三个要同时使用加速度传感器和陀螺仪，需要的权限比较大，理论上耗电也多一点
 - `GravitySensor` 和 `devicemotion` 提供的加速度数据格式相同，都是三个轴上的加速度（m/s<sup>2</sup>），写代码比较方便
 - `RelativeOrientationSensor` 以四元数的格式提供数据，使用起来可能不方便
-- 这两个能覆盖 Safari 以外的所有现代浏览器
+- 这两个能覆盖所有现代浏览器
 
 ### 计算
 
