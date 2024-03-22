@@ -10,7 +10,7 @@ const IconGithub = (props: SVGProps<SVGSVGElement>) => {
       viewBox="0 0 20 20"
       {...props}
     >
-      <title>{"github [#142]"}</title>
+      <title>{"github"}</title>
       <path
         fill="#fff"
         fillRule="evenodd"

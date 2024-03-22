@@ -19,7 +19,7 @@ const Head: FC<HeadProps> = ({ title = "libdgc.club", children } = {}) => {
         <link href={path} key={index} rel="stylesheet" />
       ))}
       {js.map((path, index) => (
-        <script src={path} key={index} type="module"></script>
+        <script async src={path} key={index} type="module"></script>
       ))}
       {/* <link rel="preconnect" href="https://fonts.googleapis.com" /> */}
       {/* <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" /> */}

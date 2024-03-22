@@ -1,4 +1,5 @@
 // import { signal, effect, computed, batch } from "@preact/signals-core";
+import { component as oldBrowserWarning } from '../components/OldBrowserWarning'
 import { signal, effect, computed, batch } from "../../node_modules/@preact/signals-core/src/index";
 import { getTheme } from "../macros/tailwindConfig" with { type: "macro" };
 // HACK: 不让bun跑这里面的代码
@@ -83,6 +84,7 @@ const hidePreview = () => {
     imagePreview.value = { show: false, element }
   }
 }
+const imagePreviewZIndex = 20
 {
   const imageTransform = computed(() => {
     const { show, element } = imagePreview.value
@@ -109,7 +111,7 @@ const hidePreview = () => {
     if (firstRun) {
       firstRun = false
     } else if (show) {
-      element.style.zIndex = '20'
+      element.style.zIndex = `${imagePreviewZIndex}`
       showNavbar.value = false
       // 放大之后临时禁用transition
       const disableTransition = () => {
@@ -183,13 +185,13 @@ const showBackdrop = computed(() => {
   effect(() => {
     if (showBackdrop.value) {
       element.classList.remove('pointer-events-none', 'opacity-0')
-      element.classList.add('opacity-50')
+      element.classList.add('opacity-50', 'z-10')
     } else if (firstRun) {
       // HACK: 避免初始状态触发effect
       firstRun = false
     } else {
       element.classList.add('pointer-events-none', 'opacity-0')
-      element.classList.remove('opacity-50')
+      element.classList.remove('opacity-50', 'z-10')
     }
   })
 }
@@ -238,3 +240,5 @@ const scrollState = signal({
     // TODO: 滚动到顶时不隐藏
   })
 }
+
+oldBrowserWarning.attach()

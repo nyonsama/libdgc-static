@@ -1,7 +1,6 @@
 import { FC, Fragment } from "react";
 import Head from "../components/Head";
 import { Post } from "../types";
-import Link from "../components/Link";
 import Footer from "../components/Footer";
 import PostList, { Pagination } from "../components/PostList";
 

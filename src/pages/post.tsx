@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import Link from "../components/Link";
 import Script from "../components/Script";
 import IconCalendar from "../components/IconCalendar";
+import OldBrowserWarning from "../components/OldBrowserWarning";
 
 export interface PostPageProps {
   post: Post;
@@ -89,6 +90,7 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
             className="pointer-events-none fixed inset-0 bg-black opacity-0 transition-opacity"
           ></div>
         </div>
+        <OldBrowserWarning />
         <Script
           type="speculationrules"
           content={JSON.stringify({

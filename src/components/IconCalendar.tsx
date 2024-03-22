@@ -7,6 +7,7 @@ const IconCalendar: FC<SVGProps<SVGSVGElement>> = (props) => (
     viewBox="0 0 24 24"
     {...props}
   >
+    <title>{"日期"}</title>
     <path
       stroke="#d1d5db"
       strokeLinecap="round"
