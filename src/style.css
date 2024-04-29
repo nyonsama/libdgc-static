@@ -42,7 +42,7 @@
 }
 
 :root {
-  @apply h-full bg-black text-gray-300;
+  @apply h-full bg-black text-zinc-300;
   color-scheme: only dark;
 }
 
@@ -55,7 +55,7 @@ body {
 }
 
 .prose iframe {
-  @apply border border-gray-500;
+  @apply border border-zinc-500;
 }
 
 .prose code {
@@ -84,8 +84,8 @@ body {
   font-feature-settings: "halt";
 }
 
-.post img {
-  @apply relative cursor-pointer transition-transform;
+.post figure > img {
+  @apply relative z-20 cursor-pointer transition-transform data-[state=inactive]:z-0 data-[state=active]:transition-none;
 }
 
 .prose figure {

@@ -7,6 +7,7 @@ import Link from "../components/Link";
 import Script from "../components/Script";
 import IconCalendar from "../components/IconCalendar";
 import OldBrowserWarning from "../components/OldBrowserWarning";
+import ImagePreview from "../components/ImagePreview";
 
 export interface PostPageProps {
   post: Post;
@@ -20,7 +21,8 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
           {/* navbar */}
           <nav
             id="navbar"
-            className="sticky top-0 z-30 flex justify-center bg-black transition-transform"
+            data-show
+            className="sticky top-0 z-30 flex -translate-y-full justify-center bg-black transition-transform data-[show]:translate-y-0"
           >
             <div className="mx-4 flex h-12 flex-1 flex-row items-center justify-between sm:max-w-2xl lg:max-w-4xl">
               <a href="/">libdgc</a>
@@ -37,11 +39,11 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
               {/* sidebar */}
               <aside
                 id="sidebar"
-                className="w-48 transition-transform max-lg:fixed max-lg:-right-56 max-lg:bottom-0 max-lg:top-0 max-lg:z-40 max-lg:w-56 max-lg:bg-zinc-900 lg:ml-8"
+                className="w-48 data-[show]:-translate-x-full max-lg:fixed max-lg:-right-56 max-lg:bottom-0 max-lg:top-0 max-lg:z-40 max-lg:w-56 max-lg:bg-zinc-900 max-lg:transition-transform lg:ml-8"
               >
                 <div className="h-full overflow-y-auto max-lg:px-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)]">
                   <h2 className="text-lg font-medium leading-[3rem]">目录</h2>
-                  <hr className="mb-2 border-t border-solid border-gray-600" />
+                  <hr className="mb-2 border-t border-solid border-zinc-600" />
                   <ul className="mb-8">
                     {post.metadata.toc?.map((toc) => (
                       <li
@@ -50,7 +52,7 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
                         className="mb-2"
                       >
                         <a
-                          className={`text-sm text-gray-400 underline-offset-2 hover:underline`}
+                          className={`text-sm text-zinc-400 underline-offset-2 hover:underline`}
                           href={"#" + encodeURIComponent(toc.id)}
                         >
                           {toc.content}
@@ -61,7 +63,7 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
                 </div>
               </aside>
               {/* post body */}
-              <main className="prose prose-invert prose-headings:text-gray-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2 max-w-full flex-1">
+              <main className="prose prose-invert max-w-full flex-1 prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2">
                 {/* title */}
                 <h1>{post.metadata.title}</h1>
                 <div className="not-prose flex flex-wrap">
@@ -70,7 +72,7 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
                     {post.metadata.createDate}
                   </div>
                   {/* tags */}
-                  <div className="not-prose flex flex-wrap gap-2 text-gray-400">
+                  <div className="not-prose flex flex-wrap gap-2 text-zinc-400">
                     {post.metadata.tags?.map((tag, i) => (
                       <div key={i}>#{tag}</div>
                     ))}
@@ -87,9 +89,10 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
           <Footer className="sm:max-w-2xl lg:max-w-4xl" />
           <div
             id="backdrop"
-            className="pointer-events-none fixed inset-0 bg-black opacity-0 transition-opacity"
+            className="pointer-events-none fixed inset-0 bg-black opacity-0 transition-opacity data-[show]:pointer-events-auto data-[show]:z-10 data-[show]:opacity-50"
           ></div>
         </div>
+        <ImagePreview />
         <OldBrowserWarning />
         <Script
           type="speculationrules"

@@ -9,7 +9,7 @@ const Page404: FC = () => {
       <body>
         <div className="pt-8 text-center">
           <h1 className="mb-4 text-4xl">404</h1>
-          <p className="text-lg text-gray-400">
+          <p className="text-lg text-zinc-400">
             Nothing here.
             <br />
             <Link href="/">Home</Link>

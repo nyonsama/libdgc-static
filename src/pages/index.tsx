@@ -23,7 +23,7 @@ export const IndexPage: FC<IndexProps> = ({ posts, pagination }) => {
             <div className="w-full max-w-2xl">
               <header className="my-16 text-center">
                 <h1 className="mb-2 text-4xl">libdgc.club</h1>
-                <p className="font-light text-gray-400">电子草稿纸</p>
+                <p className="font-light text-zinc-400">电子草稿纸</p>
               </header>
               {/* <h2 className="text-2xl">文章列表</h2> */}
               <PostList posts={posts} pagination={pagination} />

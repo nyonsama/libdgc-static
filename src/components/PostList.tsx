@@ -28,12 +28,12 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
               </a>
             </h2>
 
-            <div className="mb-2 line-clamp-3 text-sm text-gray-400">
+            <div className="mb-2 line-clamp-3 text-sm text-zinc-400">
               <CompressPunctuation text={abstract.slice(0, 250)} />
             </div>
 
             <div className="flex justify-between text-sm">
-              <div className="flex gap-2 text-gray-300">
+              <div className="flex gap-2 text-zinc-300">
                 {metadata.tags?.map((tag, i) => <div key={i}>#{tag}</div>)}
               </div>
               <div>{metadata.createDate}</div>

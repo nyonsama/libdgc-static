@@ -71,6 +71,7 @@ const rehypeImgSize =
         const { height, width } = imgFileMap.get(src)!;
         node.properties.height = height;
         node.properties.width = width;
+        node.properties["data-state"] = "inactive";
       }
     });
   };
