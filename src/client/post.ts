@@ -1,9 +1,7 @@
-// import { signal, effect, computed, batch } from "@preact/signals-core";
+import { signal, effect, computed, batch, Signal } from "@preact/signals-core";
 import oldBrowserWarning from "./components/oldBrowserWarning";
 import backdrop from "./components/backdrop";
 import navbar from "./components/navbar";
-import { signal, effect, computed, batch, Signal } from "@preact/signals-core";
-// import { getTheme } from "../macros/tailwindConfig" with { type: "macro" };
 // HACK: 不让bun跑这里面的代码
 // TODO: 等bun #4689 解决了就去掉
 if (typeof Bun !== "undefined") {
@@ -13,7 +11,6 @@ if (typeof Bun !== "undefined") {
 // const theme = getTheme();
 
 // 1024px
-// const lgQuery = window.matchMedia(`(min-width:${theme.screens.lg})`);
 const lgQuery = window.matchMedia(`(min-width:1024px)`);
 const screenIsLg = signal(lgQuery.matches);
 lgQuery.addEventListener("change", () => {
@@ -25,18 +22,8 @@ const showSidebar = signal(false);
   const element = document.getElementById("sidebar")!;
   effect(() => {
     if (showSidebar.value) {
-      // 设置tailwindcss class会导致给好几十个元素布局，不知道为什么
-      // 改成直接设置style来优化
-      // element.style.transform = "translateX(-100%)";
       element.setAttribute("data-show", "");
     } else {
-      // if (screenIsLg.peek()) {
-      //   element.style.transition = "none";
-      //   element.style.transform = "none";
-      //   void element.offsetTop; // trigger a reflow
-      //   element.style.transition = "";
-      // }
-      // element.style.transform = "none";
       element.removeAttribute("data-show");
     }
   });
@@ -182,43 +169,11 @@ const showBackdrop = computed(() => {
   backdrop.bindShow(showBackdrop);
 }
 
-// {
-//   const element = document.getElementById('backdrop')!
-//   element.addEventListener('click', () => {
-//     hidePreview()
-//     showSidebar.value = false
-//   })
-
-//   let firstRun = true
-//   effect(() => {
-//     if (showBackdrop.value) {
-//       element.setAttribute('data-show','')
-//       // element.classList.remove('pointer-events-none', 'opacity-0')
-//       // element.classList.add('opacity-50', 'z-10')
-//     } else if (firstRun) {
-//       // HACK: 避免初始状态触发effect
-//       firstRun = false
-//     } else {
-//       // element.classList.add('pointer-events-none', 'opacity-0')
-//       // element.classList.remove('opacity-50', 'z-10')
-//       element.removeAttribute('data-show')
-//     }
-//   })
-// }
-
 // control navbar
 const showNavbar = signal(true);
 {
   navbar.attach();
   navbar.bindShow(showNavbar);
-  // const navbar = document.getElementById("navbar")!;
-  // effect(() => {
-  //   if (showNavbar.value) {
-  //     navbar.style.transform = "";
-  //   } else {
-  //     navbar.style.transform = "translateY(-100%)";
-  //   }
-  // });
 }
 
 const scrollState = signal({
