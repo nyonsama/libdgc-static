@@ -7,7 +7,6 @@ import Link from "../components/Link";
 import Script from "../components/Script";
 import IconCalendar from "../components/IconCalendar";
 import OldBrowserWarning from "../components/OldBrowserWarning";
-import ImagePreview from "../components/ImagePreview";
 
 export interface PostPageProps {
   post: Post;
@@ -92,7 +91,6 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
             className="pointer-events-none fixed inset-0 bg-black opacity-0 transition-opacity data-[show]:pointer-events-auto data-[show]:z-10 data-[show]:opacity-50"
           ></div>
         </div>
-        <ImagePreview />
         <OldBrowserWarning />
         <Script
           type="speculationrules"

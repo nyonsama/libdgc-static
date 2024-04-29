@@ -1,31 +1,5 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import IconWarning from "./IconWarning";
-import { effect, signal } from "@preact/signals-core";
-
-export const component = {
-  element: null as HTMLElement | null,
-  button: null as HTMLElement | null,
-  show: signal(false),
-  attach() {
-    this.element = document.getElementById("old-browser-warning");
-    this.button = document.getElementById("old-browser-warning-button");
-
-    if (!Reflect.has(Array.prototype, "at")) {
-      // https://caniuse.com/mdn-javascript_builtins_array_at
-      this.show.value = true;
-    }
-    effect(() => {
-      if (this.show.value) {
-        this.element?.setAttribute("data-show", "");
-      } else {
-        this.element?.removeAttribute("data-show");
-      }
-    });
-    this.button?.addEventListener("click", () => {
-      this.show.value = false;
-    });
-  },
-};
 
 const OldBrowserWarning: FC = () => {
   return (
