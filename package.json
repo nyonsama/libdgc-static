@@ -29,6 +29,7 @@
     "@preact/signals-core": "^1.5.1",
     "@tailwindcss/typography": "^0.5.10",
     "classnames": "^2.3.2",
+    "esbuild": "^0.20.2",
     "hast-util-to-html": "^9.0.0",
     "hastscript": "^8.0.0",
     "highlight.js": "^11.9.0",
