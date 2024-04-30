@@ -14,7 +14,7 @@ export const IndexPage: FC<IndexProps> = ({ posts, pagination }) => {
     <html lang="zh">
       <Head />
       <body>
-        <div className="flex min-h-full flex-col">
+        <div className="flex min-h-screen flex-col">
           <nav className="sticky top-0 flex justify-center bg-black">
             <div className="mx-4 flex h-12 max-w-2xl flex-1 flex-row items-center justify-between">
               <a href="/">libdgc</a>
