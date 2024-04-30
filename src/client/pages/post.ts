@@ -1,7 +1,7 @@
 import { signal, effect, computed, batch, Signal } from "@preact/signals-core";
-import oldBrowserWarning from "./components/oldBrowserWarning";
-import backdrop from "./components/backdrop";
-import navbar from "./components/navbar";
+import oldBrowserWarning from "../components/oldBrowserWarning";
+import backdrop from "../components/backdrop";
+import navbar from "../components/navbar";
 // HACK: 不让bun跑这里面的代码
 // TODO: 等bun #4689 解决了就去掉
 if (typeof Bun !== "undefined") {

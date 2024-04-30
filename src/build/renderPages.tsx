@@ -136,12 +136,14 @@ const renderIndexPage = async (postDataList: IndexProps["posts"]) => {
       new Date(b.metadata.createDate).valueOf() -
       new Date(a.metadata.createDate).valueOf(),
   );
+  const jsBundlePath = await getJsUrlPathByPage("index");
   await renderPage(
     "/",
     <IndexPage
       posts={postDataList.slice(0, postsPerPage)}
       pagination={{ current: 0, total: totalPages }}
     />,
+    { jsPaths: [jsBundlePath] },
   );
 };
 
@@ -154,8 +156,13 @@ const renderListPages = async (postDataList: IndexProps["posts"]) => {
       (index + 1) * postsPerPage,
     );
     const pagination = { current: index, total: totalPages };
+    const jsBundlePath = await getJsUrlPathByPage("list");
     renderTasks.push(
-      renderPage(`/list/${index + 1}`, <ListPage {...{ pagination, posts }} />),
+      renderPage(
+        `/list/${index + 1}`,
+        <ListPage {...{ pagination, posts }} />,
+        { jsPaths: [jsBundlePath] },
+      ),
     );
   }
   await Promise.all(renderTasks);

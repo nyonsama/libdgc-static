@@ -3,6 +3,7 @@ import Head from "../components/Head";
 import { Post } from "../types";
 import Footer from "../components/Footer";
 import PostList, { Pagination } from "../components/PostList";
+import OldBrowserWarning from "../components/OldBrowserWarning";
 
 export interface IndexProps {
   posts: Post[];
@@ -31,6 +32,7 @@ export const IndexPage: FC<IndexProps> = ({ posts, pagination }) => {
           </div>
           <Footer className="max-w-2xl" />
         </div>
+        <OldBrowserWarning />
       </body>
     </html>
   );

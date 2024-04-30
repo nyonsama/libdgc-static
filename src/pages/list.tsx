@@ -3,6 +3,7 @@ import Head from "../components/Head";
 import PostList, { Pagination } from "../components/PostList";
 import { Post } from "../types";
 import Footer from "../components/Footer";
+import OldBrowserWarning from "../components/OldBrowserWarning";
 
 export interface ListPageProps {
   posts: Post[];
@@ -27,6 +28,7 @@ const ListPage: FC<ListPageProps> = ({ pagination, posts }) => {
           </div>
           <Footer className="max-w-2xl" />
         </div>
+        <OldBrowserWarning />
       </body>
     </html>
   );

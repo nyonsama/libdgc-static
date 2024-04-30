@@ -12,8 +12,10 @@ export const getTheme = () => {
 };
 
 export const bundleClientJs = async () => {
-  // NOTE: 新增有js的页面时，手动把入口添加到这里
-  const entryPoints = ["src/client/post.ts"];
+  const pagesPath = "src/client/pages";
+  const entryPoints = (await fs.readdir(pagesPath))
+    .filter((name) => name.endsWith(".ts"))
+    .map((name) => `${pagesPath}/${name}`);
   // HACK: 让bun watch能探测src/client的改动
   // TODO: 等 https://github.com/oven-sh/bun/issues/4689 实现了就把这个不靠谱的方法改掉
   Promise.allSettled(entryPoints.map((path) => import(`../../${path}`))).catch(
