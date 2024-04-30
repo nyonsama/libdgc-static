@@ -1,3 +1,7 @@
 import oldBrowserWarning from "../components/oldBrowserWarning";
-
-oldBrowserWarning.attach();
+import { noBun, waitDOMContentLoaded } from "../utils";
+noBun();
+(async () => {
+  await waitDOMContentLoaded();
+  oldBrowserWarning.attach();
+})();

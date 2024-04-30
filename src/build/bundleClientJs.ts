@@ -30,7 +30,7 @@ export const bundleClientJs = async () => {
     splitting: true,
     format: "esm",
     // target: "browser",
-    // minify: true,
+    minify: true,
     entryNames: "[dir]/[name]-[hash]",
     target: "esnext",
   });
