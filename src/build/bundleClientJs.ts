@@ -30,6 +30,7 @@ export const bundleClientJs = async () => {
     // target: "browser",
     // minify: true,
     entryNames: "[dir]/[name]-[hash]",
+    target: "esnext",
   });
 
   errors.forEach((log) => console.error(log));

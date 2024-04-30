@@ -148,10 +148,16 @@ const allowScroll = computed<boolean>(() => {
   return !imagePreview.value.show;
 });
 {
+  const stopProp = (e: Event) => {
+    e.preventDefault();
+  };
   effect(() => {
     if (allowScroll.value) {
+      document.removeEventListener("touchmove", stopProp);
       html.style.overflow = "";
     } else {
+      // ios safari需要额外阻止一下touchmove事件
+      document.addEventListener("touchmove", stopProp, { passive: false });
       html.style.overflow = "hidden";
     }
   });
