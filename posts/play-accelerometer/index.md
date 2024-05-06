@@ -61,4 +61,4 @@ iOS Safari可以使用`devicemotion`，详见下文
 
 涉及三维空间中的旋转，可以使用欧拉角、四元数或矩阵来计算。参见：[三维旋转（知乎）](https://zhuanlan.zhihu.com/p/135951128)、[怎样使用单位四元数旋转一个向量（StackExchange）](https://math.stackexchange.com/questions/40164/how-do-you-rotate-a-vector-by-a-unit-quaternion)
 
-因为我自己都一知半解，所以不进一步介绍了。构建项目时生成了 sourcemap，建议直接 F12 看代码，有注释（
+因为我自己都一知半解，所以不进一步介绍了。[仓库地址](https://github.com/nyonsama/libdgc-static/tree/main/packages/play-accelerometer)
