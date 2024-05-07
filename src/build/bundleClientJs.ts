@@ -22,14 +22,14 @@ export const bundleClientJs = async () => {
     (e) => {},
   );
   // TODO: 把tailwindcss的断点的值插入代码
-  const { errors, warnings } = await esbuild.build({
+  const { errors, warnings, metafile } = await esbuild.build({
     entryPoints,
     outdir: path.join("dist", "assets", "js"),
     bundle: true,
     sourcemap: "external",
-    splitting: true,
+    // splitting: true,
     format: "esm",
-    // target: "browser",
+    // metafile: true,
     minify: true,
     entryNames: "[dir]/[name]-[hash]",
     target: "esnext",
@@ -37,6 +37,7 @@ export const bundleClientJs = async () => {
 
   errors.forEach((log) => console.error(log));
   warnings.forEach((log) => console.warn(log));
+  // console.log("metafile", metafile);
 };
 
 export const getJsUrlPathByPage = async (pageName: string) => {
