@@ -1,5 +1,4 @@
 import { signal, effect, computed, batch, Signal } from "@preact/signals-core";
-import oldBrowserWarning from "../components/oldBrowserWarning";
 import backdrop from "../components/backdrop";
 import navbar from "../components/navbar";
 import { noBun, waitDOMContentLoaded } from "../utils";
@@ -219,6 +218,4 @@ noBun();
       // TODO: 滚动到顶时不隐藏
     });
   }
-
-  oldBrowserWarning.attach();
 })();

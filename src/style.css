@@ -95,3 +95,7 @@ body {
 .compress {
   @apply -mr-[0.5em];
 }
+
+#old-browser-warning-checkbox:checked + #old-browser-warning {
+  @apply translate-y-full;
+}
