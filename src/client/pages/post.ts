@@ -2,11 +2,14 @@ import { signal, effect, computed, batch, Signal } from "@preact/signals-core";
 import backdrop from "../components/backdrop";
 import navbar from "../components/navbar";
 import { noBun, waitDOMContentLoaded } from "../utils";
+import iframeLoading from "../components/iframeLoading";
 
 noBun();
 
 (async () => {
   await waitDOMContentLoaded();
+
+  iframeLoading.attach();
 
   // const theme = getTheme();
 

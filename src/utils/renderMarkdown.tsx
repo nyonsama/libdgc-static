@@ -1,3 +1,4 @@
+/** @jsxImportSource hastscript */
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
@@ -23,6 +24,7 @@ import {
 import path from "path";
 import { promisify } from "util";
 import _sizeOf from "image-size";
+import { visitParents } from "unist-util-visit-parents";
 
 const sizeOf = promisify(_sizeOf);
 
@@ -100,10 +102,24 @@ const rehypeWrapImg = () => (tree: hast.Root, file: VFile) => {
   });
 };
 
-const rehypeIFrameTitle = () => (tree: hast.Root, file: VFile) => {
-  visit(tree, "element", (node) => {
+const rehypeIFrame = () => (tree: hast.Root, file: VFile) => {
+  visitParents(tree, "element", (node, parents) => {
     if (node.tagName === "iframe") {
       node.properties.title ??= "showcase";
+      const directParent = parents.at(-1)!;
+      directParent.children.splice(
+        directParent.children.indexOf(node),
+        1,
+        (
+          <div class="iframe-wrapper relative">
+            {node}
+            <div class="absolute inset-0 flex select-none items-center justify-center border border-zinc-500 opacity-0">
+              <div>Loading...</div>
+            </div>
+          </div>
+        ) as hast.Element,
+      );
+      return SKIP;
     }
   });
 };
@@ -182,7 +198,7 @@ export const renderMarkdown = async (markdown: string, basePath: string) => {
     .use(rehypeExtractToc) // export a toc object
     .use(rehypeImgSize, { basePath })
     .use(rehypeWrapImg) // wrap <img> with <figure>
-    .use(rehypeIFrameTitle)
+    .use(rehypeIFrame)
     .use(rehypeExternalAnchor)
     .use(rehypeCompressPunctuation)
     .use(rehypeHighlight)

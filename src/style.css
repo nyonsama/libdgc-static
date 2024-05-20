@@ -54,10 +54,6 @@ body {
   text-decoration-line: underline;
 }
 
-.prose iframe {
-  @apply border border-zinc-500;
-}
-
 .prose code {
   @apply text-xs;
 }
@@ -98,4 +94,25 @@ body {
 
 #old-browser-warning-checkbox:checked + #old-browser-warning {
   @apply translate-y-full;
+}
+
+@keyframes iframe-loading-breathe {
+  from {
+    @apply opacity-0;
+  }
+  to {
+    @apply opacity-100;
+  }
+}
+
+.prose iframe {
+  @apply border border-zinc-500;
+}
+
+.iframe-wrapper[data-loading] > iframe {
+  @apply opacity-0;
+}
+
+.iframe-wrapper[data-loading] > iframe + div {
+  animation: 1s ease-in-out infinite alternate iframe-loading-breathe;
 }

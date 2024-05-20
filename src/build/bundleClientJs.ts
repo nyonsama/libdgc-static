@@ -44,9 +44,10 @@ export const getJsUrlPathByPage = async (pageName: string) => {
   const jsFiles = (
     await fs.readdir(path.join("dist", "assets", "js"), { recursive: true })
   ).filter((fileName) => fileName.endsWith(".js"));
-  const result = jsFiles.find((fileName) => fileName.startsWith(pageName));
+  const result =
+    jsFiles.find((fileName) => fileName.startsWith(pageName)) ?? null;
   if (!result) {
-    throw new Error(`cant find js bundle file by page name '${pageName}'`);
+    console.warn(`cant find js bundle for page '${pageName}'`);
   }
-  return `/assets/js/${result}`;
+  return result ? `/assets/js/${result}` : result;
 };

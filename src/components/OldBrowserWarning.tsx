@@ -11,7 +11,7 @@ const OldBrowserWarning: FC = () => {
       />
       <div
         id="old-browser-warning"
-        className="fixed bottom-0 left-0 right-0 z-50 flex justify-center border-t border-yellow-400 bg-zinc-800 transition-transform supports-[aspect-auto]:translate-y-full"
+        className="fixed bottom-0 left-0 right-0 z-50 flex justify-center border-t border-yellow-400 bg-zinc-800 transition-transform supports-[aspect-ratio:auto]:translate-y-full"
       >
         <div className="mx-4 flex w-full items-start justify-center sm:max-w-2xl lg:max-w-4xl">
           <IconWarning className="mr-4 mt-4 h-6 w-6 text-yellow-400" />
