@@ -15,7 +15,6 @@ import { SKIP, visit } from "unist-util-visit";
 import { toHtml } from "hast-util-to-html";
 import { matter } from "vfile-matter";
 import rehypePresetMinify from "rehype-preset-minify";
-import { h } from "hastscript";
 import { TocEntry } from "../types";
 import {
   allCompressibleCharacters,
@@ -90,9 +89,11 @@ const rehypeWrapImg = () => (tree: hast.Root, file: VFile) => {
         }
         // 手动设置了class或style的话就不处理
         if (!child.properties.class && !child.properties.style) {
-          const figure = h("figure", {}, [child]);
+          const figure = (<figure>{child}</figure>) as hast.Element;
           if (typeof caption === "string") {
-            figure.children.push(h("figcaption", {}, [caption]));
+            figure.children.push(
+              (<figcaption>{caption}</figcaption>) as hast.Element,
+            );
           }
           node.children[index] = figure;
         }
@@ -166,18 +167,13 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
         const needCompress = new RegExp(`[${allCompressibleCharacters}]$`).test(
           lastText?.value ?? "",
         );
-        const icon = h("img", {
-          class: [
-            "inline-block",
-            "w-3",
-            "h-3",
-            needCompress ? "ml-0" : "ml-1",
-            "align-baseline",
-            "not-prose",
-          ],
-          src: "/assets/img/external-link.svg",
-          alt: "外部链接",
-        });
+        const icon = (
+          <img
+            class={`not-prose inline-block h-3 w-3 align-baseline ${needCompress ? "ml-0" : "ml-1"}`}
+            src="/assets/img/external-link.svg"
+            alt="外部链接"
+          />
+        ) as hast.Element;
         node.children.push(icon);
         node.children.push({ type: "text", value: " " });
       }
