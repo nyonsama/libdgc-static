@@ -114,7 +114,7 @@ const rehypeIFrame = () => (tree: hast.Root, file: VFile) => {
         (
           <div class="iframe-wrapper relative">
             {node}
-            <div class="absolute inset-0 flex select-none items-center justify-center border border-zinc-500 opacity-0">
+            <div class="pointer-events-none absolute inset-0 flex select-none items-center justify-center border border-zinc-500 opacity-0">
               <div>Loading...</div>
             </div>
           </div>

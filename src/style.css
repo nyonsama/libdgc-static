@@ -110,7 +110,7 @@ body {
 }
 
 .iframe-wrapper[data-loading] > iframe {
-  @apply opacity-0;
+  @apply opacity-0 pointer-events-none;
 }
 
 .iframe-wrapper[data-loading] > iframe + div {
