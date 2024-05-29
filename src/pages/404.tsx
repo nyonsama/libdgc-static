@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Head from "../components/Head";
 import Link from "../components/Link";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const Page404: FC = () => {
   return (
@@ -15,6 +16,7 @@ const Page404: FC = () => {
             <Link href="/">Home</Link>
           </p>
         </div>
+        <GoogleAnalytics />
       </body>
     </html>
   );

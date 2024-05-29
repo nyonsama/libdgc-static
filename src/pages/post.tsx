@@ -7,6 +7,7 @@ import Link from "../components/Link";
 import Script from "../components/Script";
 import IconCalendar from "../components/IconCalendar";
 import OldBrowserWarning from "../components/OldBrowserWarning";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 export interface PostPageProps {
   post: Post;
@@ -103,6 +104,7 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
             ],
           })}
         />
+        <GoogleAnalytics />
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import PostList, { Pagination } from "../components/PostList";
 import { Post } from "../types";
 import Footer from "../components/Footer";
 import OldBrowserWarning from "../components/OldBrowserWarning";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 export interface ListPageProps {
   posts: Post[];
@@ -29,6 +30,7 @@ const ListPage: FC<ListPageProps> = ({ pagination, posts }) => {
           <Footer className="max-w-2xl" />
         </div>
         <OldBrowserWarning />
+        <GoogleAnalytics />
       </body>
     </html>
   );
