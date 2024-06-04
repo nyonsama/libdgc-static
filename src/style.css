@@ -88,11 +88,17 @@ body {
   @apply relative flex flex-col items-center;
 }
 
-@supports not (text-spacing-trim: normal) {
-  .compress {
-    @apply -mr-[0.5em];
-  }
+/* @supports not (text-spacing-trim: normal) { */
+.compress {
+  @apply -mr-[0.5em];
+  /* 
+    NOTE: chrome123+支持了原生标点挤压，但是需要字体支持 opentype halt 或 chws 特性
+    （https://www.duidaima.com/Group/Topic/CSS/19524），某些设备的默认字体不支持导致没法用。
+    这里只好禁用原生的标点挤压
+  */
+  text-spacing-trim: space-all;
 }
+/* } */
 
 #old-browser-warning-checkbox:checked + #old-browser-warning {
   @apply translate-y-full;
