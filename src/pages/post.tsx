@@ -63,7 +63,7 @@ export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
                 </div>
               </aside>
               {/* post body */}
-              <main className="prose prose-invert max-w-full flex-1 prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2">
+              <main className="prose prose-invert min-w-0 flex-1 prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2">
                 {/* title */}
                 <h1>{post.metadata.title}</h1>
                 <div className="not-prose flex flex-wrap">
