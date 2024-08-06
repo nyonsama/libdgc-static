@@ -1,24 +1,26 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+await new Promise<void>(resolve => document.addEventListener("DOMContentLoaded", () => resolve()))
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const canvas = document.getElementById('canvas')! as HTMLCanvasElement
+
+const resizeObserver = new ResizeObserver((entries) => {
+  const entry = entries[0];
+  const { blockSize, inlineSize } = entry.devicePixelContentBoxSize[0];
+  canvas.width = inlineSize;
+  canvas.height = blockSize;
+  draw();
+})
+resizeObserver.observe(canvas)
+
+const ctx = canvas.getContext("2d")!
+let rafId = 0;
+const draw = () => {
+  cancelAnimationFrame(rafId);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.textAlign = 'center';
+  ctx.font = '32px hack';
+  ctx.fillText('hello', canvas.width / 2, canvas.height / 2, canvas.width);
+  rafId = requestAnimationFrame(draw);
+};
+draw();
