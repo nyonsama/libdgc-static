@@ -1,7 +1,6 @@
 import { FC, Fragment } from "react";
 import { Post } from "../types";
 import classNames from "classnames";
-import IconCalendar from "./IconCalendar";
 import CompressPunctuation from "./CompressPunctuation";
 
 export interface Pagination {
@@ -16,7 +15,7 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
   return (
     <div className="flex flex-col pt-4">
       <hr className="border-zinc-700" />
-      {posts.map(({ metadata, path, html, abstract }, index) => (
+      {posts.map(({ metadata, path, abstract }, index) => (
         <Fragment key={index}>
           <article className="mb-4 mt-4 flex flex-col">
             <h2 className="mb-2">

@@ -32,9 +32,7 @@
   font-display: swap;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 * {
   scroll-behavior: smooth;
@@ -106,10 +104,10 @@ body {
 
 @keyframes iframe-loading-breathe {
   from {
-    @apply opacity-0;
+    opacity: 0;
   }
   to {
-    @apply opacity-100;
+    opacity: 1;
   }
 }
 
@@ -124,3 +122,4 @@ body {
 .iframe-wrapper[data-loading] > iframe + div {
   animation: 1s ease-in-out infinite alternate iframe-loading-breathe;
 }
+

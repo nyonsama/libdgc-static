@@ -20,7 +20,11 @@ const CompressPunctuation: FC<CompressPunctuationProps> = ({ text }) => {
       result.push(tail.slice(0, match.index!));
       textIndex += match.index!;
     }
-    result.push(<span className="compress">{match[0][0]}</span>);
+    result.push(
+      <span key={textIndex} className="compress">
+        {match[0][0]}
+      </span>,
+    );
     textIndex += 1;
   }
   return result;
