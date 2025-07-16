@@ -1,42 +1,68 @@
 // Pre-render the app into static HTML.
 // run `npm run generate` and then `dist/static` can be served as a static site.
 
-import fs from 'node:fs'
-import path from 'node:path'
-import url from 'node:url'
+import fs from "node:fs/promises";
+import path from "node:path";
+import url from "node:url";
+import { build } from "vite";
 
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
-const toAbsolute = (p) => path.resolve(__dirname, p)
+const toAbsolute = (p) => path.resolve(__dirname, p);
 
-const manifest = JSON.parse(
-  fs.readFileSync(toAbsolute('dist/static/.vite/ssr-manifest.json'), 'utf-8'),
-)
-const template = fs.readFileSync(toAbsolute('dist/static/index.html'), 'utf-8')
-const { render } = await import('./dist/server/entry-server.js')
+/** @type {import('./src/entry-server')} */
+const { render, getRoute, getStaticRoutes } = await import(
+  "./dist/server/entry-server.js"
+);
 
-// determine routes to pre-render from src/pages
-const routesToPrerender = fs
-  .readdirSync(toAbsolute('src/pages'))
-  .map((file) => {
-    const name = file.replace(/\.vue$/, '').toLowerCase()
-    return name === 'home' ? `/` : `/${name}`
-  })
-
-;(async () => {
-  // pre-render each route...
-  for (const url of routesToPrerender) {
-    const [appHtml, preloadLinks] = await render(url, manifest)
-
-    const html = template
-      .replace(`<!--preload-links-->`, preloadLinks)
-      .replace(`<!--app-html-->`, appHtml)
-
-    const filePath = `dist/static${url === '/' ? '/index' : url}.html`
-    fs.writeFileSync(toAbsolute(filePath), html)
-    console.log('pre-rendered:', filePath)
+(async () => {
+  process.cwd(__dirname);
+  await fs.rm(".temp", { recursive: true });
+  await fs.mkdir(toAbsolute(".temp"), { recursive: true });
+  const staticRoutes = await getStaticRoutes();
+  const buildInput = {};
+  const htmlFiles = [];
+  for (const url of staticRoutes) {
+    const trimmed = url.replace(/(\/?index\.html)|(\.html)|\/$/, "");
+    console.log(trimmed);
+    const { html } = await render(trimmed);
+    const filePath = path.join(".temp", url);
+    buildInput[trimmed.replace(/^\//, "")] = filePath;
+    htmlFiles.push(filePath);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, html);
   }
+  await build({
+    build: {
+      rollupOptions: {
+        input: htmlFiles,
+        output: {
+          dir: "dist",
+        },
+      },
+    },
+  });
+  const outputs = await fs.readdir(path.join("dist", ".temp"));
+  for (const output of outputs) {
+    await fs.rename(
+      path.join("dist", ".temp", output),
+      path.join("dist", output),
+    );
+  }
+  await fs.rmdir(path.join("dist", ".temp"));
 
-  // done, delete .vite directory including ssr manifest
-  fs.rmSync(toAbsolute('dist/static/.vite'), { recursive: true })
-})()
+  const posts = await fs.readdir("posts");
+  for (const post of posts) {
+    const assets = await fs.readdir(path.join("posts", post));
+    for (const asset of assets) {
+      if (asset === "index.md" || asset === "build.sh") {
+        continue;
+      }
+      await fs.cp(
+        path.join("posts", post, asset),
+        path.join("dist", "posts", post, asset),
+        { recursive: true },
+      );
+    }
+  }
+})();

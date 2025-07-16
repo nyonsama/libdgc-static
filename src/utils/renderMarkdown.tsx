@@ -14,7 +14,6 @@ import type { VFile } from "vfile";
 import { SKIP, visit } from "unist-util-visit";
 import { toHtml } from "hast-util-to-html";
 import { matter } from "vfile-matter";
-import rehypePresetMinify from "rehype-preset-minify";
 import { TocEntry } from "../types";
 import {
   allCompressibleCharacters,
@@ -24,6 +23,7 @@ import path from "path";
 import { promisify } from "util";
 import _sizeOf from "image-size";
 import { visitParents } from "unist-util-visit-parents";
+import { h } from "hastscript";
 
 const sizeOf = promisify(_sizeOf);
 
@@ -167,13 +167,18 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
         const needCompress = new RegExp(`[${allCompressibleCharacters}]$`).test(
           lastText?.value ?? "",
         );
-        const icon = (
-          <img
-            class={`not-prose inline-block h-3 w-3 align-baseline ${needCompress ? "ml-0" : "ml-1"}`}
-            src="/assets/img/external-link.svg"
-            alt="外部链接"
-          />
-        ) as hast.Element;
+        const icon = h("img", {
+          class: `not-prose inline-block h-3 w-3 align-baseline ${needCompress ? "ml-0" : "ml-1"}`,
+          src: "/assets/img/external-link.svg",
+          alt: "外部链接",
+        });
+        // const icon = (
+        //   <img
+        //     class={`not-prose inline-block h-3 w-3 align-baseline ${needCompress ? "ml-0" : "ml-1"}`}
+        //     src="/assets/img/external-link.svg"
+        //     alt="外部链接"
+        //   />
+        // ) as hast.Element;
         node.children.push(icon);
         node.children.push({ type: "text", value: " " });
       }
@@ -198,7 +203,6 @@ export const renderMarkdown = async (markdown: string, basePath: string) => {
     .use(rehypeExternalAnchor)
     .use(rehypeCompressPunctuation)
     .use(rehypeHighlight)
-    .use(rehypePresetMinify)
     .use(rehypeStringify)
     .process(markdown);
   return {

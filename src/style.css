@@ -33,6 +33,11 @@
 }
 
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@view-transition {
+  navigation: auto;
+}
 
 * {
   scroll-behavior: smooth;
@@ -122,4 +127,3 @@ body {
 .iframe-wrapper[data-loading] > iframe + div {
   animation: 1s ease-in-out infinite alternate iframe-loading-breathe;
 }
-

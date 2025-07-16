@@ -1,5 +1,4 @@
-import { noBun, waitDOMContentLoaded } from "../utils";
-noBun();
+import { waitDOMContentLoaded } from "../utils";
 (async () => {
   await waitDOMContentLoaded();
   // TODO;

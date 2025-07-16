@@ -1,4 +1,5 @@
 const GoogleAnalytics = () => {
+  return <></>
   const inlineJs = /* js */ `
    window.dataLayer = window.dataLayer || [];
    function gtag(){dataLayer.push(arguments);}

@@ -1,21 +1,22 @@
-import { FC } from "react";
-import { Post } from "../types";
-import Head from "../components/Head";
-import IconToc from "../components/IconToc";
-import Footer from "../components/Footer";
-import Link from "../components/Link";
-import Script from "../components/Script";
-import IconCalendar from "../components/IconCalendar";
-import OldBrowserWarning from "../components/OldBrowserWarning";
-import GoogleAnalytics from "../components/GoogleAnalytics";
+import Head from "../../components/Head";
+import IconToc from "../../components/IconToc";
+import Footer from "../../components/Footer";
+import Script from "../../components/Script";
+import IconCalendar from "../../components/IconCalendar";
+import OldBrowserWarning from "../../components/OldBrowserWarning";
+import GoogleAnalytics from "../../components/GoogleAnalytics";
+import { renderPost } from "../../utils";
 
 export interface PostPageProps {
-  post: Post;
+  postName: string;
 }
-export const PostPage: FC<PostPageProps> = ({ post }: PostPageProps) => {
+export const PostPage = async ({ postName }: PostPageProps) => {
+  const post = await renderPost(postName);
   return (
     <html lang="zh">
-      <Head title={`${post.metadata.title} - libdgc.club`}></Head>
+      <Head title={`${post.metadata.title} - libdgc.club`}>
+        <script async src="/src/pages/post/client.ts" type="module"></script>
+      </Head>
       <body>
         <div className="flex min-h-screen flex-col ">
           {/* navbar */}

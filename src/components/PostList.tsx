@@ -1,21 +1,23 @@
-import { FC, Fragment } from "react";
-import { Post } from "../types";
+import { Fragment } from "react";
 import classNames from "classnames";
 import CompressPunctuation from "./CompressPunctuation";
+import { getAllPosts, postsPerPage } from "../utils";
 
-export interface Pagination {
-  current: number;
-  total: number;
-}
 export interface PostListProps {
-  posts: Post[];
-  pagination: Pagination;
+  currentPage: number; // 从1开始
 }
-const PostList: FC<PostListProps> = ({ posts, pagination }) => {
+const PostList = async ({ currentPage }: PostListProps) => {
+  const posts = await getAllPosts();
+  const currentPostIndex = (currentPage - 1) * postsPerPage;
+  const currentPagePosts = posts.slice(
+    currentPostIndex,
+    currentPostIndex + postsPerPage,
+  );
+  const totalPages = Math.ceil(posts.length / postsPerPage);
   return (
     <div className="flex flex-col pt-4">
       <hr className="border-zinc-700" />
-      {posts.map(({ metadata, path, abstract }, index) => (
+      {currentPagePosts.map(({ metadata, path, abstract }, index) => (
         <Fragment key={index}>
           <article className="mb-4 mt-4 flex flex-col">
             <h2 className="mb-2">
@@ -33,7 +35,9 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
 
             <div className="flex justify-between text-sm">
               <div className="flex gap-2 text-zinc-300">
-                {metadata.tags?.map((tag, i) => <div key={i}>#{tag}</div>)}
+                {metadata.tags?.map((tag, i) => (
+                  <div key={i}>#{tag}</div>
+                ))}
               </div>
               <div>{metadata.createDate}</div>
             </div>
@@ -42,7 +46,7 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
         </Fragment>
       ))}
       <div className="flex justify-end pt-2">
-        {Array(pagination.total)
+        {Array(totalPages)
           .fill(null)
           .map((_, i) => (
             <a
@@ -50,7 +54,7 @@ const PostList: FC<PostListProps> = ({ posts, pagination }) => {
               href={`/list/${i + 1}.html`}
               className={classNames(
                 "flex h-8 w-8 items-center justify-center text-sm",
-                i === pagination.current
+                i + 1 === currentPage
                   ? "bg-zinc-700 hover:bg-zinc-600"
                   : "hover:bg-zinc-800",
               )}
