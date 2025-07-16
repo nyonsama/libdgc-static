@@ -10,14 +10,20 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const toAbsolute = (p) => path.resolve(__dirname, p);
 
+process.cwd(__dirname);
 /** @type {import('./src/entry-server')} */
 const { render, getRoute, getStaticRoutes } = await import(
   "./dist/server/entry-server.js"
 );
 
 (async () => {
-  process.cwd(__dirname);
-  await fs.rm(".temp", { recursive: true });
+  try {
+    await fs.rm(".temp", { recursive: true });
+  } catch (e) {
+    if (e.code !== "ENOENT") {
+      throw e;
+    }
+  }
   await fs.mkdir(toAbsolute(".temp"), { recursive: true });
   const staticRoutes = await getStaticRoutes();
   const buildInput = {};
