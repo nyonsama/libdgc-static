@@ -1,9 +1,8 @@
-import { FC } from "react";
 import Head from "../components/Head";
 import Link from "../components/Link";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 
-const Page404: FC = () => {
+const Page404 = () => {
   return (
     <html lang="zh">
       <Head title="404" />

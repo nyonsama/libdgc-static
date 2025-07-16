@@ -5,11 +5,14 @@ export default {
       document.querySelectorAll(".post .iframe-wrapper"),
     );
     for (const wrapper of this.wrapperList) {
-      wrapper.setAttribute("data-loading", "");
-      const iframe = wrapper.children[0];
-      iframe.addEventListener("load", () => {
-        wrapper.removeAttribute("data-loading");
-      });
+      const iframe = wrapper.children[0] as HTMLIFrameElement;
+      const isLoading = iframe.contentWindow?.document.readyState === "loading";
+      if (isLoading) {
+        wrapper.setAttribute("data-loading", "");
+        iframe.addEventListener("load", () => {
+          wrapper.removeAttribute("data-loading");
+        });
+      }
     }
   },
 };

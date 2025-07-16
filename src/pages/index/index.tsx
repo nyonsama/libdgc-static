@@ -1,19 +1,19 @@
-import { FC, Fragment } from "react";
-import Head from "../components/Head";
-import { Post } from "../types";
-import Footer from "../components/Footer";
-import PostList, { Pagination } from "../components/PostList";
-import OldBrowserWarning from "../components/OldBrowserWarning";
-import GoogleAnalytics from "../components/GoogleAnalytics";
+import Head from "../../components/Head";
+import Footer from "../../components/Footer";
+import PostList from "../../components/PostList";
+import OldBrowserWarning from "../../components/OldBrowserWarning";
+import GoogleAnalytics from "../../components/GoogleAnalytics";
 
-export interface IndexProps {
-  posts: Post[];
-  pagination: Pagination;
-}
-export const IndexPage: FC<IndexProps> = ({ posts, pagination }) => {
+export const IndexPage = async () => {
   return (
     <html lang="zh">
-      <Head />
+      <Head>
+        <script
+          async
+          src="/src/pages/index/client.ts"
+          type="module"
+        ></script>
+      </Head>
       <body>
         <div className="flex min-h-screen flex-col">
           <nav className="sticky top-0 flex justify-center bg-black">
@@ -28,7 +28,7 @@ export const IndexPage: FC<IndexProps> = ({ posts, pagination }) => {
                 <p className="font-light text-zinc-400">电子草稿纸</p>
               </header>
               {/* <h2 className="text-2xl">文章列表</h2> */}
-              <PostList posts={posts} pagination={pagination} />
+              {await PostList({ currentPage: 1 })}
             </div>
           </div>
           <Footer className="max-w-2xl" />

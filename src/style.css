@@ -32,9 +32,12 @@
   font-display: swap;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@view-transition {
+  navigation: auto;
+}
 
 * {
   scroll-behavior: smooth;
@@ -106,10 +109,10 @@ body {
 
 @keyframes iframe-loading-breathe {
   from {
-    @apply opacity-0;
+    opacity: 0;
   }
   to {
-    @apply opacity-100;
+    opacity: 1;
   }
 }
 
