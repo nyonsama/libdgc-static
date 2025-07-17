@@ -167,18 +167,13 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
         const needCompress = new RegExp(`[${allCompressibleCharacters}]$`).test(
           lastText?.value ?? "",
         );
-        const icon = h("img", {
-          class: `not-prose inline-block h-3 w-3 align-baseline ${needCompress ? "ml-0" : "ml-1"}`,
-          src: "/assets/img/external-link.svg",
-          alt: "外部链接",
-        });
-        // const icon = (
-        //   <img
-        //     class={`not-prose inline-block h-3 w-3 align-baseline ${needCompress ? "ml-0" : "ml-1"}`}
-        //     src="/assets/img/external-link.svg"
-        //     alt="外部链接"
-        //   />
-        // ) as hast.Element;
+        const icon = (
+          <img
+            class={`not-prose inline-block h-3 w-3 align-baseline ${needCompress ? "ml-0" : "ml-1"}`}
+            src="/assets/img/external-link.svg"
+            alt="外部链接"
+          />
+        ) as hast.Element;
         node.children.push(icon);
         node.children.push({ type: "text", value: " " });
       }
