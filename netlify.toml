@@ -1,12 +1,47 @@
 [[headers]]
-for = "/*"
+for = "/*.html"
+[headers.values]
+cache-control = '''public,max-age=300,must-revalidate'''
+
+[[headers]]
+for = "/*.css"
 [headers.values]
 cache-control = '''public,max-age=86400,must-revalidate'''
 
 [[headers]]
-for = "/*.html"
+for = "/*.js"
 [headers.values]
-cache-control = '''public,max-age=300,must-revalidate'''
+cache-control = '''public,max-age=86400,must-revalidate'''
+
+[[headers]]
+for = "/*.wasm"
+[headers.values]
+cache-control = '''public,max-age=86400,must-revalidate'''
+
+[[headers]]
+for = "/*.png"
+[headers.values]
+cache-control = '''public,max-age=86400,must-revalidate'''
+
+[[headers]]
+for = "/*.jpg"
+[headers.values]
+cache-control = '''public,max-age=86400,must-revalidate'''
+
+[[headers]]
+for = "/*.svg"
+[headers.values]
+cache-control = '''public,max-age=86400,must-revalidate'''
+
+[[headers]]
+for = "/*.ico"
+[headers.values]
+cache-control = '''public,max-age=86400,must-revalidate'''
+
+[[headers]]
+for = "/*.woff2"
+[headers.values]
+cache-control = '''public,max-age=86400,must-revalidate'''
 
 [[redirects]]
 from = "/*"
