@@ -48,6 +48,7 @@ const { render, getRoute, getStaticRoutes } = await import(
       },
     },
   });
+  await fs.rm(".temp", { recursive: true });
   const outputs = await fs.readdir(path.join("dist", ".temp"));
   for (const output of outputs) {
     await fs.rename(
