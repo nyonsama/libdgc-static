@@ -4,6 +4,11 @@ for = "/*"
 cache-control = '''public,max-age=300,must-revalidate'''
 
 [[headers]]
+for = "/*/"
+[headers.values]
+cache-control = '''public,max-age=300,must-revalidate'''
+
+[[headers]]
 for = "/*.html"
 [headers.values]
 cache-control = '''public,max-age=300,must-revalidate'''
