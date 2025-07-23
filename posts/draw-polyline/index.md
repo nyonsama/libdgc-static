@@ -110,6 +110,10 @@ regl-line2d同样不能给虚线的小节设置圆角，也不能给折线贴上
 由于每一帧都需要遍历所有轨迹点，性能会受到cpu限制，画不了太多轨迹点。不过对于只有一两条折线的情况，数千个轨迹点已经够用了。TODO: 数千个？
 
 
+
+TODO: 优化
+对比直接画、lineclip、simplify、gl-matrix
+
 ## 自己画: pixijs/three.js等
 
 pixi.js 自带的pixi

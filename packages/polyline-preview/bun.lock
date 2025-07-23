@@ -4,6 +4,7 @@
     "": {
       "name": "polyline-preview",
       "dependencies": {
+        "gl-matrix": "^3.4.3",
         "maplibre-gl": "^5.6.1",
         "regl-line2d": "^3.1.3",
       },
