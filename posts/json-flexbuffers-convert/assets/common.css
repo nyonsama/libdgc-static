@@ -5,6 +5,8 @@
 html,
 body {
   margin: 0;
+  height: 100%;
+  font-family: sans-serif;
 }
 textarea {
   resize: none;
@@ -23,18 +25,13 @@ textarea {
   flex-direction: column;
 }
 #text-in {
-  height: 200px;
+  flex: 1;
 }
 #text-out {
-  height: 200px;
+  flex: 1;
 }
 #go-button {
   height: 32px;
-}
-#text-in-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
 }
 .long-warning {
   display: none;
