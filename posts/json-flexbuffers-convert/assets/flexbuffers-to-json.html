@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+  <head>
+    <link href="common.css" rel="stylesheet" />
+    <style>
+      * {
+        color-scheme: dark only;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="input-file">
+        在下方输入 flexbuffers 的 Base64 字符串或
+        <input type="file" id="file-input" />
+      </div>
+      <div id="text-in-wrapper">
+        <textarea id="text-in"></textarea>
+      </div>
+      <label>
+        在输入框里展示完整文件内容
+        <input type="checkbox" id="show-full-file" />
+      </label>
+      <label>
+        美观输出 JSON
+        <input type="checkbox" id="prettify-json" />
+      </label>
+
+      <button id="go-button">Go!</button>
+
+      <div>
+        JSON 结果
+        <button id="download-output">导出文件</button>
+        <button id="copy-output">复制完整 JSON</button>
+      </div>
+      <textarea id="text-out" disabled></textarea>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "flatbuffers/mjs/flexbuffers": "https://esm.sh/flatbuffers@25.2.10/mjs/flexbuffers",
+          "@preact/signals-core": "https://esm.sh/@preact/signals-core@1.12.1",
+          "core-js/proposals/array-buffer-base64": "https://esm.sh/core-js@3.45.1/proposals/array-buffer-base64"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as flexbuffers from "flatbuffers/mjs/flexbuffers";
+      import { signal, computed, effect } from "@preact/signals-core";
+
+      if (!Uint8Array.fromBase64) {
+        await import("core-js/proposals/array-buffer-base64");
+      }
+
+      const id = (name) => document.getElementById(name);
+
+      const maxLength = 2 ** 12;
+
+      const inputString = signal("");
+      const outputString = signal("");
+      const outputBuffer = signal(null);
+      const selectedFile = signal(null);
+
+      const textInput = id("text-in");
+      const textOutput = id("text-out");
+      const f32CheckBox = id("float32");
+      const fileInput = id("file-input");
+
+      const isShowFullFile = signal(false);
+      const showFileCheckBox = id("show-full-file");
+      showFileCheckBox.addEventListener("change", (e) => {
+        isShowFullFile.value = showFileCheckBox.checked;
+      });
+      const overflowText = "\n（剩余内容太长，不在此展示）";
+      effect(() => {
+        if (selectedFile.value) {
+          textInput.setAttribute("disabled", "");
+        } else {
+          textInput.removeAttribute("disabled");
+        }
+      });
+      effect(() => {
+        if (!isShowFullFile.value && selectedFile.value) {
+          textInput.value = inputString.value.slice(0, maxLength);
+          if (inputString.value.length > maxLength) {
+            textInput.value += overflowText;
+          }
+        } else {
+          textInput.value = inputString.value;
+        }
+      });
+
+      effect(() => {
+        if (!isShowFullFile.value) {
+          textOutput.value = outputString.value.slice(0, maxLength);
+          if (outputString.value.length > maxLength) {
+            textOutput.value += overflowText;
+          }
+        } else {
+          textOutput.value = outputString.value;
+        }
+      });
+
+      textInput.addEventListener("change", (e) => {
+        inputString.value = textInput.value;
+      });
+
+      fileInput.addEventListener("change", async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+          inputString.value = "";
+          selectedFile.value = null;
+          return;
+        }
+        selectedFile.value = file;
+
+        const buffer = await file.arrayBuffer();
+        const base64String = new Uint8Array(buffer).toBase64();
+        inputString.value = base64String;
+      });
+
+      const prettifyCheckBox = id("prettify-json");
+      const goButton = id("go-button");
+      goButton.addEventListener("click", () => {
+        if (!inputString.value) {
+          return;
+        }
+        const inputBuffer = Uint8Array.fromBase64(inputString.value).buffer;
+        const obj = flexbuffers.toObject(inputBuffer);
+        const ident = prettifyCheckBox.checked ? 2 : 0;
+        const json = JSON.stringify(obj, null, ident);
+        outputString.value = json;
+      });
+
+      const downloadButton = id("download-output");
+      downloadButton.addEventListener("click", (e) => {
+        if (!outputString.value.length) {
+          return;
+        }
+        const a = document.createElement("a");
+        a.setAttribute("download", "output.json");
+        const blob = new Blob([outputString.value]);
+        const url = URL.createObjectURL(blob);
+        a.setAttribute("href", url);
+        a.click();
+      });
+
+      const copyButton = id("copy-output");
+      copyButton.addEventListener("click", () => {
+        if (outputString.value) {
+          return navigator.clipboard.writeText(outputString.value);
+        }
+      });
+    </script>
+  </body>
+</html>
