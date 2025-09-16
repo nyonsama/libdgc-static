@@ -10,7 +10,19 @@ export * from "./compressPunctuation";
 
 export const postsPerPage = 10;
 export const getPostNames = async () => {
-  return await fs.readdir("posts");
+  const names = await fs.readdir("posts");
+  const accessibility = await Promise.all(
+    names.map((name) =>
+      fs
+        .access(path.join("posts", name, "index.md"))
+        .then(() => true)
+        .catch(() => {
+          console.log(`cant read posts/${name}/index.md, ignored`);
+          return false;
+        }),
+    ),
+  );
+  return names.filter((_, index) => accessibility[index]);
 };
 export const getPostPageCount = async () => {
   const postNames = await getPostNames();
