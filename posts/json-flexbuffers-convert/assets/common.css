@@ -1,0 +1,43 @@
+* {
+  color-scheme: dark only;
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+}
+textarea {
+  resize: none;
+}
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
+}
+.input {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+#text-in {
+  height: 200px;
+}
+#text-out {
+  height: 200px;
+}
+#go-button {
+  height: 32px;
+}
+#text-in-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.long-warning {
+  display: none;
+  font-size: small;
+  color: orange;
+}
