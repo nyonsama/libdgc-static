@@ -1,6 +1,6 @@
 ---
-title: "rem 布局踩坑"
-createDate: "2026-01-19"
+title: "rem 布局踩坑：样式冲突、宽屏适配和布局精度"
+createDate: "2026-02-03"
 tags: ["前端", "CSS"]
 ---
 
