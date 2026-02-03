@@ -155,7 +155,7 @@
       const nextParams = new URLSearchParams({
         contentParams: params.get('contentParams'),
       });
-      domNode.remContent.setAttribute("src", `${props.content}?${nextParams}`);
+      domNode.remContent.setAttribute("src", `${props.content}.html?${nextParams}`);
 
       const setWidth = (value) => {
         domNode.remContent.style.width = `${value}px`;
