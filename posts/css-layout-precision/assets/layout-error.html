@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./common.css" rel="stylesheet" />
+    <style>
+      html {
+        /* 100vw == 750 rpx */
+        /* 1rem == 100 rpx */
+        /* 1rem == 100vw / 7.5 */
+        font-size: calc(100vw / 7.5);
+        outline: 1px solid white;
+        outline-offset: -1px;
+      }
+      .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.24rem;
+        height: 100vh;
+      }
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.3rem;
+        flex-shrink: 0;
+      }
+      .wrapper p {
+        line-height: 1.5;
+        margin: 0;
+        white-space: nowrap;
+      }
+
+      .circle {
+        position: relative;
+        flex-shrink: 0;
+        height: 0.32rem;
+        width: 0.32rem;
+
+        outline: 0.04rem solid orange;
+        outline-offset: -0.02rem;
+        border: 0.06rem solid transparent;
+      }
+      .dot {
+        background: orange;
+        width: 0.2rem;
+        height: 0.2rem;
+      }
+      .flex-center .circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .flex-center .dot {
+        flex-shrink: 0;
+      }
+      .position-inset .dot {
+        position: absolute;
+        inset: 0;
+        width: auto;
+        height: auto;
+      }
+      .position-transform .dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper flex-center">
+        <div class="circle">
+          <div class="dot"></div>
+        </div>
+        <p>flex</p>
+      </div>
+
+      <div class="wrapper position-inset">
+        <div class="circle">
+          <div class="dot"></div>
+        </div>
+        <p>inset 0</p>
+      </div>
+
+      <div class="wrapper position-transform">
+        <div class="circle">
+          <div class="dot"></div>
+        </div>
+        <p>translate -50%</p>
+      </div>
+    </div>
+  </body>
+</html>

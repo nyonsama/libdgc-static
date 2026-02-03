@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./common.css" rel="stylesheet" />
+    <style>
+      html {
+        /* 100vw == 750 rpx */
+        /* 1rem == 100 rpx */
+        /* 1rem == 100vw / 7.5 */
+        font-size: calc(100vw / 7.5);
+        --outline-color: #999999;
+      }
+      html[data-widescreen-workaround=""] {
+        /* css数值有精度限制，下面的font-size的计算在firefox上会产生舍入误差 */
+        /* --max-rpx: calc(100vh / 800);
+        --rpx: calc(100vw / 750 );
+        font-size: calc(min(var(--rpx), var(--max-rpx)) * 100); */
+
+        /* 让数值变大，避免舍入 */
+        --max-rpx: calc(100vh / 800 * 100);
+        --rpx: calc(100vw / 750 * 100);
+        font-size: min(var(--rpx), var(--max-rpx));
+      }
+      html[data-widescreen-workaround=""] .container {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 7.5rem;
+      }
+      .outline {
+        outline: 0.02rem solid var(--outline-color);
+        outline-offset: -0.02rem;
+      }
+      .container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .container div {
+        display: flex;
+        /* flex-shrink: 0; */
+      }
+      .navbar {
+        height: 0.88rem;
+        justify-content: center;
+        align-items: center;
+      }
+      .navbar-back {
+        justify-content: center;
+        align-items: center;
+        width: 0.88rem;
+        height: 0.88rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 0.44rem;
+        filter: grayscale();
+      }
+      .navbar-title {
+        font-weight: 500;
+        font-size: 0.34rem;
+      }
+      .page-content {
+        flex: 1;
+        background-image: repeating-linear-gradient(
+          -45deg,
+          transparent 0 20px,
+          rgba(127, 127, 127, 0.3) 20px 40px
+        );
+        flex-direction: column;
+        align-items: center;
+      }
+      .page-content p {
+        font-size: 0.3rem;
+        margin-top: 0.12rem;
+        margin-bottom: 0.12rem;
+      }
+      .horizontal-line {
+        border-top: 0.02rem solid orange;
+        width: 0.8rem;
+      }
+      .vertical-line {
+        border-left: 0.02rem solid orange;
+        flex: 1;
+      }
+      .bottom-tabs {
+        height: 1rem;
+      }
+      .tab-item {
+        position: relative;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        border-right: 0.02rem solid var(--outline-color);
+      }
+      .tab-item:first-child {
+        border-left: 0.02rem solid var(--outline-color);
+      }
+      .tab-item p {
+        margin: 0;
+        font-size: 0.3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container outline">
+      <div class="navbar outline">
+        <div class="navbar-back outline">⬅️</div>
+        <div class="navbar-title">导航栏</div>
+      </div>
+      <div class="page-content">
+        <div class="horizontal-line"></div>
+        <div class="vertical-line"></div>
+        <p>
+          滚动区域（高 <code id="content-height"></code> 宽
+          <code>7.5rem</code>）
+        </p>
+        <div class="vertical-line"></div>
+        <div class="horizontal-line"></div>
+      </div>
+      <div class="bottom-tabs outline">
+        <div class="tab-item"><p>底栏A</p></div>
+        <div class="tab-item"><p>底栏B</p></div>
+        <div class="tab-item"><p>底栏C</p></div>
+        <div class="tab-item"><p>底栏D</p></div>
+      </div>
+    </div>
+    <script>
+      const url = new URL(location.href);
+      const params = url.searchParams.get("contentParams");
+      if (params === "widescreen") {
+        document.documentElement.setAttribute("data-widescreen-workaround", "");
+      }
+      const domNode = {
+        pageContent: document.querySelector(".page-content"),
+        contentHeight: document.getElementById("content-height"),
+      };
+      const showContentHeight = () => {
+        const rect = domNode.pageContent.getBoundingClientRect();
+        const pxHeight = rect.height;
+        const remHeight = ((pxHeight / rect.width) * 750) / 100;
+        domNode.contentHeight.textContent = `${remHeight.toFixed(2)}rem`;
+      };
+      window.addEventListener("resize", showContentHeight);
+      showContentHeight();
+    </script>
+  </body>
+</html>

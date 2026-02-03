@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./common.css" rel="stylesheet" />
+    <style>
+      html {
+        /* 0.01rem对应--up-scale个css像素 */
+        font-size: calc(1px * var(--up-scale) * 100);
+
+        /* 在calc()里让两个有单位的值相除 只在很新的浏览器里支持 */
+        /* https://caniuse.com/mdn-css_types_calc_typed_division_produces_unitless_number */
+        /* --down-scale: calc(100vw / 7.5rem); */
+
+        overflow: clip;
+        height: 100vh;
+        width: 100vw;
+
+        outline: 1px solid white;
+        outline-offset: -1px;
+      }
+
+      body {
+        width: 7.5rem;
+
+        /* 在calc()里让两个有单位的值相除 只在很新的浏览器里支持 */
+        /* https://caniuse.com/mdn-css_types_calc_typed_division_produces_unitless_number */
+        /* height: calc(7.5rem * 100vh / 100vw); */
+
+        height: calc(100vh / var(--down-scale));
+        transform: scale(var(--down-scale));
+        transform-origin: top left;
+
+        display: flex;
+        flex-direction: column;
+      }
+      [data-firefox=""] body {
+        /* firefox 需要一点rotate，否则依然会有布局误差，和没缩放一样 */
+        transform: rotate(0.03deg) scale(var(--down-scale));
+      }
+      .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.24rem;
+      }
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.3rem;
+        flex-shrink: 0;
+      }
+      .wrapper p {
+        line-height: 1.5;
+        margin: 0;
+        white-space: nowrap;
+      }
+
+      .circle {
+        position: relative;
+        flex-shrink: 0;
+        height: 0.32rem;
+        width: 0.32rem;
+
+        outline: 0.04rem solid orange;
+        outline-offset: -0.02rem;
+        border: 0.06rem solid transparent;
+      }
+      .dot {
+        background: orange;
+        width: 0.2rem;
+        height: 0.2rem;
+      }
+      .flex-center .circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .flex-center .dot {
+        flex-shrink: 0;
+      }
+      .position-inset .dot {
+        position: absolute;
+        inset: 0;
+        width: auto;
+        height: auto;
+      }
+      .position-transform .dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper flex-center">
+        <div class="circle">
+          <div class="dot"></div>
+        </div>
+        <p>flex</p>
+      </div>
+
+      <div class="wrapper position-inset">
+        <div class="circle">
+          <div class="dot"></div>
+        </div>
+        <p>inset 0</p>
+      </div>
+
+      <div class="wrapper position-transform">
+        <div class="circle">
+          <div class="dot"></div>
+        </div>
+        <p>translate -50%</p>
+      </div>
+    </div>
+    <script>
+      if (navigator.userAgent.toLowerCase().includes("firefox")) {
+        document.documentElement.setAttribute("data-firefox", "");
+      }
+      const imaginaryWidth = 750;
+
+      // 使用window的resize事件会导致抖动
+      const resizeObserver = new ResizeObserver((entries) => {
+        const { inlineSize: fullWidth, blockSize: fullHeight } =
+          entries?.[0]?.borderBoxSize?.[0] ?? {};
+        if (!fullWidth || !fullHeight) {
+          return;
+        }
+
+        // 放大倍数
+        // 让0.01rem对应upScale*devicePixelRatio个物理像素
+        const upScale =
+          Math.ceil((fullWidth * devicePixelRatio) / imaginaryWidth) /
+          devicePixelRatio;
+
+        // 缩小倍数
+        // 把放大后的容器缩小到页面大小
+        const downScale = fullWidth / (imaginaryWidth * upScale);
+
+        document.documentElement.style.setProperty("--up-scale", `${upScale}`);
+        document.documentElement.style.setProperty(
+          "--down-scale",
+          `${downScale}`,
+        );
+      });
+      resizeObserver.observe(document.documentElement);
+    </script>
+  </body>
+</html>

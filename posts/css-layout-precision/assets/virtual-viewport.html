@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./common.css" rel="stylesheet" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 100vh;
+        overflow: hidden;
+        gap: 8px;
+      }
+      .input-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-inline: 8px;
+      }
+      .slider {
+        flex: 1;
+      }
+      #number-input {
+        width: 4rem;
+      }
+      /* ensures the increment/decrement arrows always display */
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        opacity: 1;
+      }
+      .container {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        overflow: clip;
+      }
+      .overflow-container {
+        position: relative;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 0.5rem;
+        padding-bottom: 2rem;
+      }
+      #rem-content {
+        border: none;
+        flex: 1;
+        flex-shrink: 0;
+      }
+      .width-indicator {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        /* align-self: stretch; */
+        border: 1px solid orange;
+        border-width: 0 1px 0 1px;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .width-indicator hr {
+        border-color: orange;
+      }
+      #indicator-value {
+        margin-left: 8px;
+        margin-right: 8px;
+        font-family: monospace;
+      }
+      .status {
+        padding-inline: 8px;
+        padding-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="overflow-container">
+        <iframe id="rem-content"></iframe>
+        <div class="width-indicator">
+          <hr style="flex: 1" />
+          <span id="indicator-value"></span>
+          <hr style="flex: 1" />
+        </div>
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <input
+        class="slider"
+        type="range"
+        id="slider"
+        min="200"
+        max="800"
+        step="1"
+      />
+      <input id="number-input" type="number" min="200" max="800" step="1" />
+    </div>
+    <div class="status">
+      <span id="animation-switch-group">
+        <label>
+          自动演示
+          <input id="animation-switch" type="checkbox" />
+        </label>
+        <br />
+      </span>
+      <label
+        >屏幕宽度（css像素）：<code><span id="logical-pixel"></span>px</code>
+      </label>
+      <br />
+      <label
+        ><code>devicePixelRatio: <span id="dpr"></span></code
+      ></label>
+      <br />
+      <label
+        >屏幕宽度（物理像素）：<code
+          ><span id="physics-pixel"></span>px</code
+        ></label
+      >
+    </div>
+
+    <script>
+      const defaultWidth = 375;
+      const id = (elementId) => document.getElementById(elementId);
+      const domNode = {
+        remContent: id("rem-content"),
+        slider: id("slider"),
+        numberInput: id("number-input"),
+        animationSwitchGroup: id("animation-switch-group"),
+        animationSwitch: id("animation-switch"),
+        logicalPixel: id("logical-pixel"),
+        dpr: id("dpr"),
+        indicatorValue: id("indicator-value"),
+        physicsPixel: id("physics-pixel"),
+      };
+      domNode.dpr.textContent = devicePixelRatio;
+
+      const params = new URL(location.href).searchParams;
+      const animationPropEnum = {
+        disabled: "disabled",
+        autoplay: "autoplay",
+      };
+      const props = {
+        animation: params.get("animation"),
+        content: params.get("content"),
+      };
+      if (props.animation === animationPropEnum.disabled) {
+        domNode.animationSwitchGroup.style.display = "none";
+      }
+      const nextParams = new URLSearchParams({
+        contentParams: params.get('contentParams'),
+      });
+      domNode.remContent.setAttribute("src", `${props.content}?${nextParams}`);
+
+      const setWidth = (value) => {
+        domNode.remContent.style.width = `${value}px`;
+        domNode.logicalPixel.textContent = value;
+        domNode.physicsPixel.textContent = value * devicePixelRatio;
+        domNode.indicatorValue.textContent = `屏幕宽度：${value}px`;
+        domNode.numberInput.value = value;
+        domNode.slider.value = value;
+      };
+      setWidth(375);
+      domNode.slider.addEventListener("input", (e) => {
+        setAnimationState(false);
+        setWidth(Number(e.target.value));
+      });
+      domNode.numberInput.addEventListener("change", (e) => {
+        setAnimationState(false);
+        setWidth(Number(e.target.value));
+      });
+      domNode.numberInput.addEventListener("input", () => {
+        setAnimationState(false);
+      });
+
+      let rafId = 0;
+      let startTime = 0;
+      let lastTick = 0; // ms
+      const frameRate = 12;
+      const frameTime = 1000 / frameRate;
+      const period = 18000;
+      const startValue = 350;
+      const endValue = 600;
+      const timingFunction = (start, end, t) => {
+        const delta = end - start;
+        return start + delta * (-Math.abs(t * 2 - 1) + 1);
+      };
+      const animationLoop = () => {
+        const now = performance.now();
+        const duration = now - lastTick;
+        if (duration - frameTime < -1) {
+          rafId = requestAnimationFrame(animationLoop);
+          return;
+        }
+        let t = (now - startTime) / period;
+        if (t > 1) {
+          setAnimationState(false);
+          return;
+        }
+        t -= Math.trunc(t);
+        const currentValue = timingFunction(startValue, endValue, t);
+        setWidth(Math.round(currentValue));
+        lastTick = now;
+        rafId = requestAnimationFrame(animationLoop);
+      };
+      const startAnimation = () => {
+        rafId = requestAnimationFrame(() => {
+          startTime = performance.now();
+          lastTick = 0;
+          animationLoop();
+        });
+      };
+      const stopAnimation = () => {
+        cancelAnimationFrame(rafId);
+      };
+      const setAnimationState = (value) => {
+        domNode.animationSwitch.checked = value;
+        if (value) {
+          startAnimation();
+        } else {
+          stopAnimation();
+        }
+      };
+
+      domNode.animationSwitch.addEventListener("input", (e) => {
+        setAnimationState(e.target.checked);
+      });
+      setAnimationState(props.animation === animationPropEnum.autoplay);
+    </script>
+  </body>
+</html>
