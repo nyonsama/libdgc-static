@@ -1,6 +1,7 @@
 ---
 title: "测试 Markdown 渲染效果" # 此处中英文混排需要手动加空格，正文使用vscode自动加空格所以不用手动
 createDate: "2023-01-20"
+lastEditDate: "2026-02-05"
 tags: ["markdown", "测试", "站务"]
 ---
 
@@ -128,3 +129,27 @@ const FancyThing: React.FC = () => {
 用来放示例代码
 
 <iframe src="./fuc.html"></iframe>
+
+### GFM Alerts
+
+> [!NOTE]  
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]  
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]  
+> Negative potential consequences of an action.
+
+### 用来补充说明的文本
+
+<small>用 `<small>` 把文本包起来
+
+支持多段文本
+</small>

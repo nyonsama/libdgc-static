@@ -64,26 +64,33 @@ export const PostPage = async ({ postName }: PostPageProps) => {
                 </div>
               </aside>
               {/* post body */}
-              <main className="prose prose-invert min-w-0 flex-1 prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2">
-                {/* title */}
-                <h1>{post.metadata.title}</h1>
-                <div className="not-prose flex flex-wrap">
-                  <div className="mr-4">
-                    <IconCalendar className="mr-2 inline-block h-full w-[18px] align-top" />
-                    {post.metadata.createDate}
+              <main className="prose prose-invert prose-zinc  min-w-0 flex-1 prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2">
+                <article>
+                  {/* title */}
+                  <h1><span>{post.metadata.title}</span></h1>
+                  <div className="not-prose flex flex-wrap">
+                    <div className="mr-4">
+                      <IconCalendar className="mr-2 inline-block h-full w-[18px] align-top" />
+                      {post.metadata.createDate}
+                    </div>
+                    {/* tags */}
+                    <div className="not-prose flex flex-wrap gap-2 text-zinc-400">
+                      {post.metadata.tags?.map((tag, i) => (
+                        <div key={i}>#{tag}</div>
+                      ))}
+                    </div>
                   </div>
-                  {/* tags */}
-                  <div className="not-prose flex flex-wrap gap-2 text-zinc-400">
-                    {post.metadata.tags?.map((tag, i) => (
-                      <div key={i}>#{tag}</div>
-                    ))}
-                  </div>
-                </div>
-                {/* content */}
-                <div
-                  className="post"
-                  dangerouslySetInnerHTML={{ __html: post.html }}
-                ></div>
+                  {post.metadata.lastEditDate && (
+                    <div className="not-prose mt-2 text-sm text-zinc-400">
+                      最近编辑：{post.metadata.lastEditDate}
+                    </div>
+                  )}
+                  {/* content */}
+                  <div
+                    className="post"
+                    dangerouslySetInnerHTML={{ __html: post.html }}
+                  ></div>
+                </article>
               </main>
             </div>
           </div>

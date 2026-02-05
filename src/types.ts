@@ -1,6 +1,6 @@
 export interface PostMetadata {
   createDate: string;
-  modifyDate?: string;
+  lastEditDate?: string;
   title: string;
   author?: string;
   tags?: string[];

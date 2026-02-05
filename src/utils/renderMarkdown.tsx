@@ -5,6 +5,7 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
+import { rehypeGithubAlerts } from "rehype-github-alerts";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
@@ -189,6 +190,7 @@ export const renderMarkdown = async (markdown: string, basePath: string) => {
     .use(remarkGfm)
     .use(remarkRemoveTitle)
     .use(remarkRehype, { allowDangerousHtml: true }) // convert markdown to html
+    .use(() => rehypeGithubAlerts({}))
     .use(rehypeRaw) // parse raw html in markdown
     .use(rehypeSlug) // add id to headings
     .use(rehypeExtractToc) // export a toc object
