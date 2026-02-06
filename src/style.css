@@ -90,7 +90,7 @@ body {
 }
 .prose h1 > span {
   line-height: 1.1111111;
-  vertical-align: top
+  vertical-align: top;
 }
 
 /* .prose summary {
@@ -140,23 +140,6 @@ body {
   @apply translate-y-full;
 }
 
-@keyframes iframe-loading-breathe {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .prose iframe {
-  @apply border border-zinc-500;
-}
-
-.iframe-wrapper[data-loading] > iframe {
-  @apply pointer-events-none opacity-0;
-}
-
-.iframe-wrapper[data-loading] > iframe + div {
-  animation: 1s ease-in-out infinite alternate iframe-loading-breathe;
+  @apply my-5 border border-zinc-500;
 }
