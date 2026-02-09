@@ -59,16 +59,11 @@ body {
 }
 
 .prose pre {
-  @apply -mx-4;
+  @apply -mx-4 overflow-x-scroll rounded-none px-0;
 }
 
-.prose code {
-  @apply bg-transparent text-xs;
-}
-
-.prose pre code,
-.prose pre code.hljs {
-  @apply p-0;
+.prose code.hljs {
+  @apply w-max bg-transparent px-4 py-0 text-xs;
 }
 
 .prose code {
@@ -92,17 +87,6 @@ body {
   line-height: 1.1111111;
   vertical-align: top;
 }
-
-/* .prose summary {
-  @apply text-zinc-400;
-  pointer-events: none;
-}
-.prose summary::marker {
-  content: "";
-}
-.prose details {
-  @apply border-l-4 border-zinc-700 py-2 pl-4 text-zinc-400;
-} */
 
 .prose small {
   @apply text-sm text-zinc-400;
