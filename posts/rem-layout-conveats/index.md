@@ -81,7 +81,7 @@ html {
 }
 ```
 
-这一串`calc()`写起来很麻烦。于是我找到了 [PostCSS Custom CSS Units](https://github.com/joe223/postcss-custom-css-units)：
+这一串 `calc()` 写起来很麻烦。于是我找到了 [PostCSS Custom CSS Units](https://github.com/joe223/postcss-custom-css-units)：
 
 ![PostCSS Custom CSS Units 的 Readme](./assets/postcss-plugin.png)
 

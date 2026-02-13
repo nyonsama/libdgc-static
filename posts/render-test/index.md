@@ -33,7 +33,7 @@ Rust 破除了这些障碍：它消除了旧的陷阱，并提供了伴你一路
 
 ### 图片
 
-`<img>`本来是行内元素，但是 tailwindcss 把它重设成了 block
+`<img>` 本来是行内元素，但是 tailwindcss 把它重设成了 block
 
 ![some image](./assets/reacticon.ico)
 
