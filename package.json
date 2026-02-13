@@ -56,6 +56,9 @@
     "update-browserslist-db": "^1.0.15"
   },
   "prettier": {
-    "plugins": ["prettier-plugin-tailwindcss"]
+    "plugins": [
+      "prettier-plugin-tailwindcss",
+      "./scripts/markdown-space/index.js"
+    ]
   }
 }
