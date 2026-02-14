@@ -58,4 +58,4 @@ type Aaa = {
 <small>更稳健的做法是把代码解析成 AST（抽象语法树），修改 AST，然后生成代码。
 没有这样做是因为我希望代码格式（缩进等）保持不变</small>
 
-具体实现比较长，请移步[这里](https://github.com/nyonsama/libdgc-static/posts/protobuf-schema-sorter/assets/sorter/sort.js)或者 F12，找 `sort.js`。
+具体实现比较长，请移步[这里](https://github.com/nyonsama/libdgc-static/blob/main/posts/protobuf-schema-sorter/assets/sorter/sort.js)或者 F12，找 `sort.js`。
