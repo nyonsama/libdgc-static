@@ -90,7 +90,7 @@
       </div>
     </div>
 
-    <div class="input-bar">
+    <form class="input-bar" onsubmit="return false">
       <input
         class="slider"
         type="range"
@@ -99,8 +99,15 @@
         max="800"
         step="1"
       />
-      <input id="number-input" type="number" min="200" max="800" step="1" />
-    </div>
+      <input
+        id="number-input"
+        type="number"
+        min="200"
+        max="800"
+        step="1"
+        enterkeyhint="done"
+      />
+    </form>
     <div class="status">
       <span id="animation-switch-group">
         <label>
@@ -153,9 +160,12 @@
         domNode.animationSwitchGroup.style.display = "none";
       }
       const nextParams = new URLSearchParams({
-        contentParams: params.get('contentParams'),
+        contentParams: params.get("contentParams"),
       });
-      domNode.remContent.setAttribute("src", `${props.content}.html?${nextParams}`);
+      domNode.remContent.setAttribute(
+        "src",
+        `${props.content}.html?${nextParams}`,
+      );
 
       const setWidth = (value) => {
         domNode.remContent.style.width = `${value}px`;
