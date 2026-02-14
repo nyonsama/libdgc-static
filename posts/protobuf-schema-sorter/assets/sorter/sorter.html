@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://esm.sh/highlight.js@11.11.1/styles/github-dark.min.css"
+    />
+    <style>
+      * {
+        color-scheme: dark only;
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 0.5rem;
+      }
+      #downloadDemo {
+        display: block;
+        margin-top: 0.5rem;
+      }
+
+      summary {
+        position: relative;
+        height: 2rem;
+        line-height: 2rem;
+        padding-inline: 0.5rem;
+        margin-inline: -0.5rem;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      details summary::marker {
+        content: "";
+      }
+      details[open] summary::marker {
+        content: "";
+      }
+      details summary::before {
+        display: inline-block;
+        font-size: small;
+        width: 1rem;
+        content: "＋";
+      }
+      details[open] summary::before {
+        content: "－";
+      }
+
+      details:not([open]) summary button {
+        display: none;
+      }
+      details summary button {
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+      }
+
+      pre {
+        margin-inline: -0.5rem;
+        margin-block: 0;
+      }
+      pre code {
+        padding-left: 1.5rem !important;
+      }
+
+      #downloadResult {
+        margin-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <label>
+        选择 proto 文件：<input id="fileInput" type="file" multiple />
+      </label>
+    </div>
+    <button id="downloadDemo">没有文件？下载示例</button>
+    <div id="resultList"></div>
+    <button id="downloadResult" style="display: none">下载全部</button>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
