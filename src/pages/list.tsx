@@ -16,7 +16,7 @@ const ListPage = async ({ currentPage }: { currentPage: number }) => {
             </div>
           </nav>
           <div className="flex flex-1 flex-col items-center px-4 pb-8">
-            <div className="w-full max-w-2xl pt-4">
+            <div className="w-full max-w-2xl pt-6">
               <h1 className="text-2xl">文章列表</h1>
               {await PostList({ currentPage: currentPage })}
             </div>
