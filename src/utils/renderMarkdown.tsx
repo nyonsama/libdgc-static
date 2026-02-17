@@ -9,6 +9,7 @@ import { rehypeGithubAlerts } from "rehype-github-alerts";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
+import { all as highlightAllLanguages } from "lowlight";
 import type hast from "hast";
 import type mdast from "mdast";
 import type { VFile } from "vfile";
@@ -21,10 +22,7 @@ import {
   rehypeCompressPunctuation,
 } from "./compressPunctuation";
 import path from "path";
-import { promisify } from "util";
-import _sizeOf from "image-size";
-
-const sizeOf = promisify(_sizeOf);
+import { imageSizeFromFile } from "image-size/fromFile";
 
 const remarkRemoveTitle = () => (tree: mdast.Root, file: VFile) => {
   let titleIndex = tree.children.findIndex(
@@ -49,7 +47,7 @@ const rehypeImgSize =
     });
     for (const [src] of imgFileMap) {
       const imgPath = path.join(options.basePath, src);
-      const result = (await sizeOf(imgPath))!;
+      const result = (await imageSizeFromFile(imgPath))!;
       if (result.images) {
         // 对于ico等包含多种大小的图片，取最大的
         const { width, height } = result.images.reduce((prev, curr) => {
@@ -174,7 +172,7 @@ export const renderMarkdown = async (markdown: string, basePath: string) => {
     .use(rehypeWrapImg) // wrap <img> with <figure>
     .use(rehypeExternalAnchor)
     .use(rehypeCompressPunctuation)
-    .use(rehypeHighlight)
+    .use(() => rehypeHighlight({ languages: highlightAllLanguages }))
     .use(rehypeStringify)
     .process(markdown);
   return {
