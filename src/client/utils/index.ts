@@ -13,10 +13,6 @@ export const waitDOMContentLoaded = async () => {
   });
 };
 
-export const noBun = () => {
-  // HACK: 不让bun跑这里面的代码
-  // TODO: 等bun #4689 解决了就去掉
-  if (typeof Bun !== "undefined") {
-    throw "i am in bun";
-  }
+export const delay = async (duration: number) => {
+  return new Promise<void>((resolve) => setTimeout(() => resolve(), duration));
 };

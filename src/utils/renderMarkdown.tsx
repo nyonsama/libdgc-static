@@ -23,6 +23,7 @@ import {
 } from "./compressPunctuation";
 import path from "path";
 import { imageSizeFromFile } from "image-size/fromFile";
+import { visitParents } from "unist-util-visit-parents";
 
 const remarkRemoveTitle = () => (tree: mdast.Root, file: VFile) => {
   let titleIndex = tree.children.findIndex(
@@ -156,6 +157,42 @@ const rehypeExternalAnchor = () => (tree: hast.Root, file: VFile) => {
   });
 };
 
+const rehypeCodeBlockHeader = () => (tree: hast.Root, file: VFile) => {
+  visitParents(tree, (node, parents) => {
+    if (node.type !== "element") {
+      return;
+    }
+    const parent = parents.at(-1)!;
+    const child = node.children[0];
+    if (!child || child.type !== "element") {
+      return;
+    }
+    if (node.tagName === "pre" && child.tagName === "code") {
+      const className = child.properties.className;
+      let lang = "plaintext";
+      if (Array.isArray(className)) {
+        const highlightClass = className.find(
+          (c) => typeof c === "string" && c.startsWith("language-"),
+        ) as string | undefined;
+        lang = highlightClass?.replace(/^.*-/, "") ?? lang;
+      }
+
+      const nodeIndex = parent.children.findIndex((child) => child === node);
+      const header = (
+        <div class="code-wrapper">
+          <div class="code-header">
+            <div class="code-lang">{lang}</div>
+            <button class="code-copy">复制</button>
+          </div>
+          {node}
+        </div>
+      ) as hast.Element;
+      parent.children.splice(nodeIndex, 1, header);
+      return "skip";
+    }
+  });
+};
+
 export const renderMarkdown = async (markdown: string, basePath: string) => {
   const vf = await unified()
     .use(remarkParse)
@@ -166,6 +203,7 @@ export const renderMarkdown = async (markdown: string, basePath: string) => {
     .use(remarkRehype, { allowDangerousHtml: true }) // convert markdown to html
     .use(() => rehypeGithubAlerts({}))
     .use(rehypeRaw) // parse raw html in markdown
+    .use(rehypeCodeBlockHeader)
     .use(rehypeSlug) // add id to headings
     .use(rehypeExtractToc) // export a toc object
     .use(rehypeImgSize, { basePath })

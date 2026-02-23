@@ -1,7 +1,7 @@
 import { signal, effect, computed, batch, Signal } from "@preact/signals-core";
 import backdrop from "../components/backdrop";
 import navbar from "../components/navbar";
-import { waitDOMContentLoaded } from "../utils";
+import { delay, waitDOMContentLoaded } from "../utils";
 
 (async () => {
   await waitDOMContentLoaded();
@@ -215,5 +215,27 @@ import { waitDOMContentLoaded } from "../utils";
       }
       // TODO: 滚动到顶时不隐藏
     });
+  }
+
+  // 复制按钮
+  {
+    const copyButtons = document.querySelectorAll(".prose button.code-copy");
+    for (const button of copyButtons) {
+      const code = button.parentElement?.parentElement?.querySelector("code");
+      if (!code?.textContent) {
+        continue;
+      }
+      let endTime = 0;
+      button.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(code.textContent);
+        const duration = 1000
+        endTime = performance.now() + duration;
+        button.textContent = "已复制";
+        await delay(duration)
+        if (performance.now() > endTime) {
+          button.textContent = "复制";
+        }
+      });
+    }
   }
 })();

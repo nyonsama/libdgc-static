@@ -54,58 +54,85 @@ body {
   @apply min-h-full bg-zinc-900;
 }
 
-.prose a:hover:not(a[class~="not-prose"]) {
-  text-decoration-line: underline;
-}
+.prose {
+  a:hover:not(a[class~="not-prose"]) {
+    text-decoration-line: underline;
+  }
 
-.prose pre {
-  @apply -mx-4 overflow-x-scroll rounded-none px-0;
-}
+  pre {
+    @apply relative mt-0 mb-6 overflow-x-scroll rounded-none bg-black px-0;
+  }
 
-.prose code.hljs {
-  @apply w-max bg-transparent px-4 py-0 text-xs;
-}
+  pre > code {
+    @apply mx-4 block w-max bg-transparent p-0 text-xs;
+  }
 
-.prose code {
-  font-family: Hack, ui-monospace, monospace;
-}
+  code {
+    font-family: Hack, ui-monospace, monospace;
+  }
 
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  @apply scroll-mt-16;
-}
+  .code-wrapper {
+    @apply relative -mx-4 bg-black;
+  }
+  .code-header {
+    @apply mt-6 flex border-b border-zinc-700 bg-black pl-4;
+  }
+  .code-lang {
+    @apply flex-1 text-sm leading-6 text-zinc-400;
+  }
+  .code-copy {
+    @apply px-4 text-sm text-zinc-400 select-none pointer-fine:hover:bg-zinc-800;
 
-.prose h1 {
-  line-height: 1.5;
-  margin-bottom: 0.5em;
-}
-.prose h1 > span {
-  line-height: 1.1111111;
-  vertical-align: top;
-}
+    &:hover {
+      @apply cursor-pointer;
+    }
 
-.prose small {
-  @apply text-sm text-zinc-400;
-}
+    &:active {
+      @apply bg-zinc-700;
+    }
+  }
 
-.prose small code {
-  @apply text-zinc-300;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply scroll-mt-16;
+  }
+
+  h1 {
+    line-height: 1.5;
+    margin-bottom: 0.5em;
+  }
+  h1 > span {
+    line-height: 1.1111111;
+    vertical-align: top;
+  }
+
+  small {
+    @apply text-sm text-zinc-400;
+  }
+
+  small code {
+    @apply text-zinc-300;
+  }
+
+  iframe {
+    @apply my-5 border border-zinc-500;
+  }
+
+  .post figure > img {
+    @apply relative z-20 cursor-pointer transition-transform data-[state=active]:transition-none data-[state=inactive]:z-0;
+  }
+
+  figure {
+    @apply relative flex flex-col items-center;
+  }
 }
 
 .halt {
   font-feature-settings: "halt";
-}
-
-.post figure > img {
-  @apply relative z-20 cursor-pointer transition-transform data-[state=inactive]:z-0 data-[state=active]:transition-none;
-}
-
-.prose figure {
-  @apply relative flex flex-col items-center;
 }
 
 /* @supports not (text-spacing-trim: normal) { */
@@ -122,8 +149,4 @@ body {
 
 #old-browser-warning-checkbox:checked + #old-browser-warning {
   @apply translate-y-full;
-}
-
-.prose iframe {
-  @apply my-5 border border-zinc-500;
 }

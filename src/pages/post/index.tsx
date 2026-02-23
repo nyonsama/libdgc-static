@@ -27,12 +27,12 @@ export const PostPage = async ({ postName }: PostPageProps) => {
           >
             <div className="mx-4 flex h-12 flex-1 flex-row items-center justify-between sm:max-w-2xl lg:max-w-4xl">
               <a href="/">libdgc</a>
-              <div
+              <button
                 id="button-show-toc"
                 className="-mr-4 flex h-12 w-12 cursor-pointer items-center justify-center lg:hidden"
               >
                 <IconToc className="h-6 w-6" />
-              </div>
+              </button>
             </div>
           </nav>
           <div className="flex flex-1 flex-col items-center px-4 py-8">
