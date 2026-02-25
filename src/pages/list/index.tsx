@@ -1,13 +1,15 @@
-import Head from "../components/Head";
-import PostList from "../components/PostList";
-import Footer from "../components/Footer";
-import OldBrowserWarning from "../components/OldBrowserWarning";
-import GoogleAnalytics from "../components/GoogleAnalytics";
+import Head from "../../components/Head";
+import PostList from "../../components/PostList";
+import Footer from "../../components/Footer";
+import OldBrowserWarning from "../../components/OldBrowserWarning";
 
-const ListPage = async ({ currentPage }: { currentPage: number }) => {
+const ListPage = async ({ path }: { path: string }) => {
+  const currentPage = Number(path.match(/\/list\/([0-9]+)/)![1]);
   return (
     <html lang="zh">
-      <Head title={`文章列表-第${currentPage}页`} />
+      <Head title={`文章列表 - 第 ${currentPage} 页`}>
+        <script async src="/src/pages/list/client.ts" type="module"></script>
+      </Head>
       <body>
         <div className="flex min-h-screen flex-col">
           <nav className="sticky top-0 flex justify-center bg-black">
@@ -24,7 +26,6 @@ const ListPage = async ({ currentPage }: { currentPage: number }) => {
           <Footer className="max-w-2xl" />
         </div>
         <OldBrowserWarning />
-        <GoogleAnalytics />
       </body>
     </html>
   );

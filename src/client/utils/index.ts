@@ -1,3 +1,5 @@
+import { inject } from "@vercel/analytics";
+
 export const waitDOMContentLoaded = async () => {
   if (document.readyState !== "loading") {
     return;
@@ -15,4 +17,8 @@ export const waitDOMContentLoaded = async () => {
 
 export const delay = async (duration: number) => {
   return new Promise<void>((resolve) => setTimeout(() => resolve(), duration));
+};
+
+export const injectAnalytics = () => {
+  inject();
 };

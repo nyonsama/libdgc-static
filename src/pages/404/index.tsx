@@ -1,11 +1,12 @@
-import Head from "../components/Head";
-import Link from "../components/Link";
-import GoogleAnalytics from "../components/GoogleAnalytics";
+import Head from "../../components/Head";
+import Link from "../../components/Link";
 
 const Page404 = () => {
   return (
     <html lang="zh">
-      <Head title="404" />
+      <Head title="404">
+        <script async src="/src/pages/404/client.ts" type="module"></script>
+      </Head>
       <body>
         <div className="pt-8 text-center">
           <h1 className="mb-4 text-4xl">404</h1>
@@ -15,7 +16,6 @@ const Page404 = () => {
             <Link href="/">Home</Link>
           </p>
         </div>
-        <GoogleAnalytics />
       </body>
     </html>
   );

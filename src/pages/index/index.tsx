@@ -2,7 +2,6 @@ import Head from "../../components/Head";
 import Footer from "../../components/Footer";
 import PostList from "../../components/PostList";
 import OldBrowserWarning from "../../components/OldBrowserWarning";
-import GoogleAnalytics from "../../components/GoogleAnalytics";
 
 export const IndexPage = async () => {
   return (
@@ -34,7 +33,6 @@ export const IndexPage = async () => {
           <Footer className="max-w-2xl" />
         </div>
         <OldBrowserWarning />
-        <GoogleAnalytics />
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 import { signal, effect, computed, batch, Signal } from "@preact/signals-core";
 import backdrop from "../components/backdrop";
 import navbar from "../components/navbar";
-import { delay, waitDOMContentLoaded } from "../utils";
+import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
 
 (async () => {
   await waitDOMContentLoaded();
@@ -238,4 +238,6 @@ import { delay, waitDOMContentLoaded } from "../utils";
       });
     }
   }
+
+  injectAnalytics()
 })();

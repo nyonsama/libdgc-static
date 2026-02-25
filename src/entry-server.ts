@@ -25,8 +25,7 @@ const routes: Route[] = [
   },
   {
     path: /\/list\/[0-9]+/,
-    component: (path) =>
-      ListPage({ currentPage: Number(path.match(/\/list\/([0-9]+)/)![1]) }),
+    component: (path) => ListPage({ path }),
     staticRoutes: async () =>
       Array(await getPostPageCount())
         .fill(null)

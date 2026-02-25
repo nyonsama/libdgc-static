@@ -4,7 +4,6 @@ import Footer from "../../components/Footer";
 import Script from "../../components/Script";
 import IconCalendar from "../../components/IconCalendar";
 import OldBrowserWarning from "../../components/OldBrowserWarning";
-import GoogleAnalytics from "../../components/GoogleAnalytics";
 import { renderPost } from "../../utils";
 
 export interface PostPageProps {
@@ -112,7 +111,6 @@ export const PostPage = async ({ postName }: PostPageProps) => {
             ],
           })}
         />
-        <GoogleAnalytics />
       </body>
     </html>
   );
