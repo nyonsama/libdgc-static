@@ -131,11 +131,6 @@ body {
   }
 }
 
-.halt {
-  font-feature-settings: "halt";
-}
-
-/* @supports not (text-spacing-trim: normal) { */
 .compress {
   @apply -mr-[0.5em];
   /* 
@@ -145,7 +140,6 @@ body {
   */
   text-spacing-trim: space-all;
 }
-/* } */
 
 #old-browser-warning-checkbox:checked + #old-browser-warning {
   @apply translate-y-full;

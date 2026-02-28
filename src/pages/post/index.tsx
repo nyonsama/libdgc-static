@@ -17,18 +17,18 @@ export const PostPage = async ({ postName }: PostPageProps) => {
         <script async src="/src/pages/post/client.ts" type="module"></script>
       </Head>
       <body>
-        <div className="flex min-h-screen flex-col ">
+        <div className="flex min-h-screen flex-col">
           {/* navbar */}
           <nav
             id="navbar"
             data-show
-            className="sticky top-0 z-30 flex -translate-y-full justify-center bg-black transition-transform data-[show]:translate-y-0"
+            className="sticky top-0 z-30 flex -translate-y-full justify-center bg-black transition-transform data-show:translate-y-0"
           >
             <div className="mx-4 flex h-12 flex-1 flex-row items-center justify-between sm:max-w-2xl lg:max-w-4xl">
               <a href="/">libdgc</a>
               <button
                 id="button-show-toc"
-                className="-mr-4 flex h-12 w-12 cursor-pointer items-center justify-center lg:hidden"
+                className="-mr-4 flex h-12 w-12 cursor-pointer items-center justify-center lg:hidden active:bg-zinc-800"
               >
                 <IconToc className="h-6 w-6" />
               </button>
@@ -39,10 +39,10 @@ export const PostPage = async ({ postName }: PostPageProps) => {
               {/* sidebar */}
               <aside
                 id="sidebar"
-                className="w-48 data-[show]:-translate-x-full max-lg:fixed max-lg:-right-56 max-lg:bottom-0 max-lg:top-0 max-lg:z-40 max-lg:w-56 max-lg:bg-zinc-900 max-lg:transition-transform lg:ml-8"
+                className="w-48 overscroll-contain data-show:-translate-x-full max-lg:fixed max-lg:top-0 max-lg:-right-56 max-lg:bottom-0 max-lg:z-40 max-lg:w-56 max-lg:bg-zinc-900 max-lg:transition-transform lg:ml-8"
               >
                 <div className="h-full overflow-y-auto max-lg:px-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)]">
-                  <h2 className="text-lg font-medium leading-[3rem]">目录</h2>
+                  <h2 className="text-lg leading-12 font-medium">目录</h2>
                   <hr className="mb-2 border-t border-solid border-zinc-600" />
                   <ul className="mb-8">
                     {post.metadata.toc?.map((toc) => (
@@ -63,13 +63,15 @@ export const PostPage = async ({ postName }: PostPageProps) => {
                 </div>
               </aside>
               {/* post body */}
-              <main className="prose prose-invert prose-zinc  min-w-0 flex-1 prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2">
+              <main className="prose prose-invert prose-zinc prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2 min-w-0 flex-1">
                 <article>
                   {/* title */}
-                  <h1><span>{post.metadata.title}</span></h1>
+                  <h1>
+                    <span>{post.metadata.title}</span>
+                  </h1>
                   <div className="not-prose flex flex-wrap">
                     <div className="mr-4">
-                      <IconCalendar className="mr-2 inline-block h-full w-[18px] align-top" />
+                      <IconCalendar className="mr-2 inline-block h-full w-4.5 align-top" />
                       {post.metadata.createDate}
                     </div>
                     {/* tags */}
@@ -96,7 +98,7 @@ export const PostPage = async ({ postName }: PostPageProps) => {
           <Footer className="sm:max-w-2xl lg:max-w-4xl" />
           <div
             id="backdrop"
-            className="pointer-events-none fixed inset-0 bg-black opacity-0 transition-opacity data-[show]:pointer-events-auto data-[show]:z-10 data-[show]:opacity-50"
+            className="pointer-events-none fixed inset-0 bg-black opacity-0 transition-opacity data-show:pointer-events-auto data-show:z-10 data-show:opacity-50"
           ></div>
         </div>
         <OldBrowserWarning />

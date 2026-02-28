@@ -26,6 +26,13 @@ import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
       }
     });
 
+    const links = element.querySelectorAll("a");
+    for (const link of links) {
+      link.addEventListener("click", () => {
+        showSidebar.value = false;
+      });
+    }
+
     let lastScreenIsLgValue: boolean | null = null;
     // 视口变宽时关掉sidebar
     effect(() => {
@@ -39,135 +46,18 @@ import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
     const tocButton = document.getElementById(
       "button-show-toc",
     )! as HTMLDivElement;
-    tocButton.addEventListener("click", () => {
+    tocButton.addEventListener("click", (e) => {
+      e.stopPropagation();
       showSidebar.value = true;
     });
   }
 
-  const html = document.documentElement;
-  const pageSize = signal({
-    height: html.clientHeight,
-    width: html.clientWidth,
-  });
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const { target } = entry;
-      if (target.tagName.toLowerCase() === "html") {
-        const { inlineSize, blockSize } = entry.contentBoxSize[0];
-        pageSize.value = { height: blockSize, width: inlineSize };
-      }
-    }
-  });
-  Promise.resolve().then(() => {
-    resizeObserver.observe(html);
-  });
-
-  // 点击图片放大
-  const imagePreview = signal({
-    show: false,
-    element: document.querySelector(".post img")! as HTMLImageElement,
-  });
-  const showPreview = (element: HTMLImageElement) => {
-    if (!imagePreview.value.show) {
-      imagePreview.value = { show: true, element };
-    }
-  };
-  const hidePreview = () => {
-    const { show, element } = imagePreview.value;
-    if (show) {
-      imagePreview.value = { show: false, element };
-    }
-  };
-  {
-    const imageTransform = computed(() => {
-      const { show, element } = imagePreview.value;
-      if (!show) {
-        return "none";
-      }
-      const offsetParentRect = element.offsetParent!.getBoundingClientRect();
-      const x = offsetParentRect.x + element.offsetLeft;
-      const y = offsetParentRect.y - element.offsetTop;
-      const width = element.offsetWidth;
-      const height = element.offsetHeight;
-      const { width: htmlWidth, height: htmlHeight } = pageSize.value;
-      const scale = `scale(${Math.min(
-        htmlWidth / width,
-        htmlHeight / height,
-        4,
-      )})`;
-      const tx = -x + htmlWidth / 2 - width / 2;
-      const ty = -y + htmlHeight / 2 - height / 2;
-      return `translate(${tx}px,${ty}px) ${scale}`;
-    });
-
-    // toggle图片预览
-    let firstRun = true;
-    effect(() => {
-      const { show, element } = imagePreview.value;
-      if (firstRun) {
-        firstRun = false;
-        return;
-      }
-      showNavbar.value = !show;
-      const nextState = show ? "fadeIn" : "fadeOut";
-      const endState = show ? "active" : "inactive";
-      element.setAttribute("data-state", nextState);
-      const bindState = () => {
-        element.setAttribute("data-state", endState);
-      };
-      element.addEventListener("transitionend", bindState, { once: true });
-      return () => element.removeEventListener("transitionend", bindState);
-    });
-
-    // 展示预览的时候把imageTransform和元素的transform绑定
-    effect(() => {
-      const { element } = imagePreview.peek();
-      if (element) {
-        element.style.transform = imageTransform.value;
-      }
-    });
-
-    // init image preview
-    const postImages = document.querySelectorAll(".post figure > img");
-    for (let index = 0; index < postImages.length; index++) {
-      const element = postImages[index] as HTMLImageElement;
-      element.addEventListener("click", () => {
-        if (imagePreview.value.show) {
-          hidePreview();
-        } else {
-          showPreview(element);
-        }
-      });
-    }
-  }
-
-  // control page scroll
-  const allowScroll = computed<boolean>(() => {
-    return !imagePreview.value.show;
-  });
-  {
-    const stopProp = (e: Event) => {
-      e.preventDefault();
-    };
-    effect(() => {
-      if (allowScroll.value) {
-        document.removeEventListener("touchmove", stopProp);
-        html.style.overflow = "";
-      } else {
-        // ios safari需要额外阻止一下touchmove事件
-        document.addEventListener("touchmove", stopProp, { passive: false });
-        html.style.overflow = "hidden";
-      }
-    });
-  }
-
   const showBackdrop = computed(() => {
-    return showSidebar.value || imagePreview.value.show;
+    return showSidebar.value;
   });
   {
     backdrop.attach();
     backdrop.onClick(() => {
-      hidePreview();
       showSidebar.value = false;
     });
     backdrop.bindShow(showBackdrop);
@@ -178,6 +68,10 @@ import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
   {
     navbar.attach();
     navbar.bindShow(showNavbar);
+
+    navbar.element!.addEventListener("click", () => {
+      showSidebar.value = false;
+    });
   }
 
   const scrollState = signal({
@@ -213,7 +107,6 @@ import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
       } else if (state === "up" && distance > 8) {
         showNavbar.value = true;
       }
-      // TODO: 滚动到顶时不隐藏
     });
   }
 
@@ -228,10 +121,10 @@ import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
       let endTime = 0;
       button.addEventListener("click", async () => {
         await navigator.clipboard.writeText(code.textContent);
-        const duration = 1000
+        const duration = 1000;
         endTime = performance.now() + duration;
         button.textContent = "已复制";
-        await delay(duration)
+        await delay(duration);
         if (performance.now() > endTime) {
           button.textContent = "复制";
         }
@@ -239,5 +132,5 @@ import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
     }
   }
 
-  injectAnalytics()
+  injectAnalytics();
 })();
