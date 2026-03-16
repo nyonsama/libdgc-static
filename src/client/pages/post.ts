@@ -132,5 +132,45 @@ import { delay, injectAnalytics, waitDOMContentLoaded } from "../utils";
     }
   }
 
+  {
+    const tocItems = [
+      ...document.querySelectorAll(".toc-item"),
+    ] as HTMLElement[];
+    const headerInfoMap = new Map(
+      tocItems.map((item) => [
+        item.getAttribute("href")!.replace(/^#/, ""),
+        { toc: item },
+      ]),
+    );
+
+    const options = {
+      root: null,
+      rootMargin: "-48px 0px -48px 0px",
+      scrollMargin: "0px",
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const id = encodeURIComponent(entry.target.children[0]?.id);
+        const headerInfo = headerInfoMap.get(id);
+        if (headerInfo) {
+          if (entry.isIntersecting) {
+            headerInfo.toc.setAttribute("data-highlight", "");
+          } else {
+            headerInfo.toc.removeAttribute("data-highlight");
+          }
+        }
+      }
+    }, options);
+
+    const headers = document.querySelectorAll(".prose :is(h2, h3, h4, h5, h6)");
+    for (const element of headers) {
+      if (element.parentElement?.tagName.toLowerCase() === "section") {
+        observer.observe(element.parentElement);
+      }
+    }
+  }
+
   injectAnalytics();
 })();

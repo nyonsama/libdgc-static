@@ -5,6 +5,7 @@ import Script from "../../components/Script";
 import IconCalendar from "../../components/IconCalendar";
 import OldBrowserWarning from "../../components/OldBrowserWarning";
 import { renderPost } from "../../utils";
+import { Sidebar } from "./sidebar";
 
 export interface PostPageProps {
   postName: string;
@@ -28,7 +29,7 @@ export const PostPage = async ({ postName }: PostPageProps) => {
               <a href="/">libdgc</a>
               <button
                 id="button-show-toc"
-                className="-mr-4 flex h-12 w-12 cursor-pointer items-center justify-center lg:hidden active:bg-zinc-800"
+                className="-mr-4 flex h-12 w-12 cursor-pointer items-center justify-center active:bg-zinc-800 lg:hidden"
               >
                 <IconToc className="h-6 w-6" />
               </button>
@@ -37,31 +38,7 @@ export const PostPage = async ({ postName }: PostPageProps) => {
           <div className="flex flex-1 flex-col items-center px-4 py-8">
             <div className="flex w-full flex-row-reverse justify-between sm:max-w-2xl lg:max-w-4xl">
               {/* sidebar */}
-              <aside
-                id="sidebar"
-                className="w-48 overscroll-contain data-show:-translate-x-full max-lg:fixed max-lg:top-0 max-lg:-right-56 max-lg:bottom-0 max-lg:z-40 max-lg:w-56 max-lg:bg-zinc-900 max-lg:transition-transform lg:ml-8"
-              >
-                <div className="h-full overflow-y-auto max-lg:px-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)]">
-                  <h2 className="text-lg leading-12 font-medium">目录</h2>
-                  <hr className="mb-2 border-t border-solid border-zinc-600" />
-                  <ul className="mb-8">
-                    {post.metadata.toc?.map((toc) => (
-                      <li
-                        key={toc.id}
-                        style={{ marginLeft: `${(toc.level - 2) * 0.5}rem` }}
-                        className="mb-2"
-                      >
-                        <a
-                          className={`text-sm text-zinc-400 underline-offset-2 hover:underline`}
-                          href={"#" + encodeURIComponent(toc.id)}
-                        >
-                          {toc.content}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </aside>
+              <Sidebar toc={post.metadata.toc} />
               {/* post body */}
               <main className="prose prose-invert prose-zinc prose-headings:text-zinc-300 prose-a:text-[#74b0e4] prose-a:no-underline prose-a:underline-offset-2 min-w-0 flex-1">
                 <article>

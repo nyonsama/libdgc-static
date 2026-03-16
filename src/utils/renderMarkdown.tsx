@@ -193,6 +193,35 @@ const rehypeCodeBlockHeader = () => (tree: hast.Root, file: VFile) => {
   });
 };
 
+const rehypeWrapWithSection = () => (tree: hast.Root, file: VFile) => {
+  const isHeading = (node: hast.RootContent): node is hast.Element => {
+    return (
+      node.type === "element" &&
+      ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.tagName)
+    );
+  };
+  const result: typeof tree.children = [];
+  let index = 0;
+  while (index < tree.children.length) {
+    const child = tree.children[index];
+    if (isHeading(child)) {
+      const sectionChildren: typeof tree.children = [child];
+      for (const sectionChild of tree.children.slice(index + 1)) {
+        if (isHeading(sectionChild)) {
+          break;
+        }
+        sectionChildren.push(sectionChild);
+      }
+      result.push(<section>{sectionChildren}</section> as hast.Element);
+      index += sectionChildren.length;
+    } else {
+      result.push(child);
+      index += 1;
+    }
+  }
+  tree.children = result;
+};
+
 export const renderMarkdown = async (markdown: string, basePath: string) => {
   const vf = await unified()
     .use(remarkParse)
@@ -211,6 +240,7 @@ export const renderMarkdown = async (markdown: string, basePath: string) => {
     .use(rehypeExternalAnchor)
     .use(rehypeCompressPunctuation)
     .use(() => rehypeHighlight({ languages: highlightAllLanguages }))
+    .use(rehypeWrapWithSection)
     .use(rehypeStringify)
     .process(markdown);
   return {

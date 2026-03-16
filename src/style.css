@@ -119,7 +119,7 @@ body {
   }
 
   iframe {
-    @apply my-5 border border-zinc-500;
+    @apply my-5 w-full border border-zinc-500;
   }
 
   .post figure > img {
@@ -144,3 +144,5 @@ body {
 #old-browser-warning-checkbox:checked + #old-browser-warning {
   @apply translate-y-full;
 }
+
+@import "./pages/post/sidebar.css";

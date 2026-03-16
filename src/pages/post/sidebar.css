@@ -1,0 +1,40 @@
+@layer components {
+  .sidebar {
+    @apply overscroll-contain data-show:-translate-x-full lg:ml-6;
+    --content-width: calc(var(--spacing) * 50);
+    width: var(--content-width);
+    /* NOTE: var(--breakpoint-lg) == 64rem */
+    @media (width < 64rem) {
+      @apply fixed top-0 bottom-0 z-40 bg-zinc-900 transition-transform;
+      --inline-padding: calc(var(--spacing) * 4);
+      --width: calc(var(--content-width) + var(--inline-padding) * 2);
+      width: var(--width);
+      right: calc(-1 * var(--width));
+    }
+
+    .sidebar-wrapper {
+      @apply h-full overflow-y-auto max-lg:px-(--inline-padding);
+      --top-gap: calc(var(--spacing) * 24);
+      @media (width > 64rem) {
+        @apply sticky top-(--top-gap) h-[calc(100vh-var(--top-gap))];
+      }
+    }
+
+    .toc-item {
+      @apply block py-1.5 pr-2 text-sm leading-5 text-zinc-400;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          @apply text-zinc-300 underline underline-offset-3;
+          background-color: rgb(from var(--color-zinc-700) r g b / 0.7);
+        }
+      }
+      [data-highlight]& {
+        @apply text-zinc-300;
+        background-color: rgb(from var(--color-zinc-700) r g b / 0.7);
+      }
+      &:active {
+        @apply bg-zinc-700 text-zinc-300;
+      }
+    }
+  }
+}
