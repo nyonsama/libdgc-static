@@ -7,7 +7,8 @@
     "dev": "node server",
     "build": "npm run build:server && node prerender.js",
     "build:server": "vite build --ssr src/entry-server.ts --outDir dist/server",
-    "preview": "npm run build && sirv dist --host 0.0.0.0"
+    "preview": "npm run build && sirv dist --host 0.0.0.0",
+    "new-post": "node scripts/newPost.js"
   },
   "dependencies": {
     "@preact/signals-core": "^1.13.0",
