@@ -1,6 +1,7 @@
 @layer components {
   .sidebar {
-    @apply overscroll-contain data-show:-translate-x-full lg:ml-6;
+    @apply data-show:-translate-x-full lg:ml-6;
+
     --content-width: calc(var(--spacing) * 50);
     width: var(--content-width);
     /* NOTE: var(--breakpoint-lg) == 64rem */
@@ -11,30 +12,69 @@
       width: var(--width);
       right: calc(-1 * var(--width));
     }
+  }
 
-    .sidebar-wrapper {
-      @apply h-full overflow-y-auto max-lg:px-(--inline-padding);
-      --top-gap: calc(var(--spacing) * 24);
-      @media (width > 64rem) {
-        @apply sticky top-(--top-gap) h-[calc(100vh-var(--top-gap))];
-      }
+  .sidebar-wrapper {
+    @apply relative h-full overflow-y-auto overscroll-contain max-lg:px-(--inline-padding);
+    --top-gap: calc(var(--spacing) * 24);
+    @media (width > 64rem) {
+      @apply sticky top-(--top-gap) h-[calc(100vh-var(--top-gap))];
     }
+
+    container-type: scroll-state;
+    container-name: sidebar-container;
 
     .toc-item {
       @apply block py-1.5 pr-2 text-sm leading-5 text-zinc-400;
+
+      [data-highlight]& {
+        @apply text-zinc-300;
+        background-color: rgb(from var(--color-zinc-700) r g b / 0.5);
+      }
       @media (hover: hover) and (pointer: fine) {
         &:hover {
           @apply text-zinc-300 underline underline-offset-3;
-          background-color: rgb(from var(--color-zinc-700) r g b / 0.7);
+          background-color: rgb(from var(--color-zinc-700) r g b / 0.5);
         }
-      }
-      [data-highlight]& {
-        @apply text-zinc-300;
-        background-color: rgb(from var(--color-zinc-700) r g b / 0.7);
       }
       &:active {
         @apply bg-zinc-700 text-zinc-300;
       }
     }
+  }
+
+  @keyframes sidebar-scroll-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .scrolled-indicator {
+    @apply sticky opacity-0;
+
+    box-shadow: var(--color-zinc-900) 0 0 1.5rem 1rem;
+
+    &[data-top] {
+      top: 0;
+    }
+
+    &[data-bottom] {
+      bottom: 0;
+    }
+  }
+}
+
+@container sidebar-container scroll-state(scrollable: top) {
+  .scrolled-indicator[data-top] {
+    animation: sidebar-scroll-fade-in 0.2s ease-out;
+    animation-fill-mode: forwards;
+  }
+}
+@container sidebar-container scroll-state(scrollable: bottom) {
+  .scrolled-indicator[data-bottom] {
+    @apply opacity-100;
   }
 }

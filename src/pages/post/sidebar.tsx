@@ -4,6 +4,7 @@ export const Sidebar = ({ toc }: { toc?: TocEntry[] }) => {
   return (
     <aside id="sidebar" className="sidebar">
       <div className="sidebar-wrapper">
+        <div className="scrolled-indicator" data-top=""></div>
         <h2 className="pl-2 text-lg leading-12 font-medium">目录</h2>
         <hr className="mb-2 border-t border-solid border-zinc-600" />
         <ul className="mb-8">
@@ -21,6 +22,7 @@ export const Sidebar = ({ toc }: { toc?: TocEntry[] }) => {
             </li>
           ))}
         </ul>
+        <div className="scrolled-indicator" data-bottom=""></div>
       </div>
     </aside>
   );
