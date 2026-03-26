@@ -1,6 +1,7 @@
 ---
 title: "给 protobuf schema 代码排序"
 createDate: "2026-02-11"
+lastEditDate: "2026-03-26"
 tags: ["protobuf", "工具"]
 ---
 
@@ -59,3 +60,8 @@ type Aaa = {
 没有这样做是因为我希望代码格式（缩进等）保持不变</small>
 
 具体实现比较长，请移步[这里](https://github.com/nyonsama/libdgc-static/blob/main/posts/protobuf-schema-sorter/assets/sorter/sort.js)或者 F12，找 `sort.js`。
+
+## 已知问题（2026-03-26 补充）
+
+- 只有最外层的代码块会被排序
+- 无法保证注释的位置（我的用例没有注释，并且难以确定排序后注释的位置应该在哪里）
