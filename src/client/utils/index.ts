@@ -20,5 +20,8 @@ export const delay = async (duration: number) => {
 };
 
 export const injectAnalytics = () => {
-  inject();
+  const url = new URL(location.href);
+  if (url.host.includes("libdgc.club")) {
+    inject();
+  }
 };
