@@ -4,7 +4,7 @@ createDate: "2026-04-10"
 tags: ["Vibe Coding", "工具"]
 ---
 
-## （95%代码是 AI 生成的）demo
+## （除了 opencv.js 95%代码是 AI 生成的）纯前端 demo
 
 <iframe style="width:100%;height:40rem;" src="./assets/embed.html"></iframe>
 
@@ -23,3 +23,5 @@ tags: ["Vibe Coding", "工具"]
 使用了 Roo code、OpenRouter、GLM5.1。
 
 正文没有使用 LLM。
+
+这个 demo 是纯前端，你选择的图片全程待在浏览器里，不会被上传到别的地方。
